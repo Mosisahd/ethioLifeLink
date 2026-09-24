@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Listing Details - EthioLifeLink</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .details-section{padding:34px 18px 70px;min-height:72vh;background:rgba(246,248,252,.94)!important}
+    .details-container{max-width:1100px!important;margin:auto!important;padding:0!important;overflow:hidden!important;background:#fff!important;border:1px solid #dfe7f1;border-radius:22px!important;box-shadow:0 18px 50px rgba(15,45,80,.12)!important}
+    .details-hero{position:relative;min-height:260px;background:#0c5da8;overflow:hidden}
+    .details-hero img{width:100%;height:300px;display:block;object-fit:cover}
+    .details-hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,40,85,.08),rgba(0,35,75,.72))}
+    .details-hero-content{position:absolute;z-index:2;left:clamp(20px,5vw,48px);right:clamp(20px,5vw,48px);bottom:30px;color:#fff}
+    .details-badge{display:inline-block;padding:7px 12px;border-radius:999px;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.35);backdrop-filter:blur(6px);font-size:12px;font-weight:800;margin-bottom:10px}
+    .details-title{color:#fff!important;font-size:clamp(28px,4vw,42px)!important;margin:0 0 8px!important}
+    .details-subtitle{margin:0;color:rgba(255,255,255,.9);font-size:15px}
+    .details-body{padding:clamp(22px,4vw,42px)}
+    .details-top-grid{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(280px,.8fr);gap:28px;align-items:start}
+    .details-info-card,.contact-box,.map-box{background:#f7faff!important;border:1px solid #e0e9f4;border-radius:16px!important;padding:20px!important}
+    .details-info{margin:0!important;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+    .detail-item{padding:13px 14px;background:#fff;border:1px solid #e6edf5;border-radius:12px;color:#536174}
+    .detail-item strong{display:block;color:#183d69;font-size:12px;text-transform:uppercase;letter-spacing:.04em;margin-bottom:4px}
+    .detail-item span{font-weight:650;color:#263b55}
+    .details-price{font-size:21px!important;color:#1268d5!important;font-weight:800!important}
+    .details-divider{border:0;border-top:1px solid #e6edf4;margin:30px 0}
+    .details-container h3{color:#173b65!important;font-size:21px!important;margin:0 0 13px}
+    .description{color:#536174!important;line-height:1.75;font-size:16px}
+    .details-list{color:#536174!important;line-height:1.75;padding-left:22px}
+    .details-list li{margin-bottom:7px}
+    .contact-buttons{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+    .contact-button,.apply-button,.map-button{display:inline-flex;align-items:center;justify-content:center;gap:7px;background:#1268d5!important;color:#fff!important;border:0;padding:11px 16px;border-radius:10px;text-decoration:none;font-weight:750;box-shadow:0 7px 18px rgba(18,104,213,.18)}
+    .contact-button:hover,.apply-button:hover,.map-button:hover{background:#0b4fa8!important;transform:translateY(-1px)}
+    .gallery{display:grid;grid-template-columns:2fr 1fr 1fr;gap:10px;margin:0 0 28px}
+    .gallery-item{height:150px;border-radius:14px;overflow:hidden;background:#eaf3ff}
+    .gallery-item:first-child{grid-row:span 2;height:310px}
+    .gallery-item img{width:100%;height:100%;object-fit:cover;display:block}
+    .no-image{height:100%;display:flex;align-items:center;justify-content:center;font-size:54px;background:linear-gradient(135deg,#eaf3ff,#d9e9fb)}
+    .back-button{display:inline-flex;margin-top:28px;color:#1268d5;text-decoration:none;font-weight:800}
+    .details-loading{text-align:center;padding:60px 20px;color:#536174}
+    .details-error{padding:40px;text-align:center}
+    .details-error h2{color:#173b65}
+    @media(max-width:780px){.details-top-grid{grid-template-columns:1fr}.details-info{grid-template-columns:1fr}.gallery{grid-template-columns:1fr 1fr}.gallery-item:first-child{grid-column:span 2;height:240px}.gallery-item{height:125px}}
+    @media(max-width:500px){.details-body{padding:20px}.gallery{display:grid;grid-template-columns:1fr}.gallery-item:first-child{grid-column:auto;height:230px}.gallery-item{height:150px}.contact-buttons{display:grid;grid-template-columns:1fr}.contact-button,.apply-button,.map-button{width:100%}}
+  </style>
+    <link rel="icon" type="image/jpeg" href="images/site-icon.jpg">
+</head>
+<body>
+<header class="navbar">
+  <div class="logo logo-with-icon"><a href="index.html" class="logo-icon-link" aria-label="EthioLifeLink home"><img src="images/site-icon.jpg" alt="EthioLifeLink logo"></a><div><h1>EthioLifeLink</h1><span>Job Vacancy and Home for Rent</span></div></div>
+  <nav>
+    <a href="index.html">Home</a><a href="jobs.html">Jobs</a><a href="homes.html">Homes</a><a href="add-listing.html">Add Listing</a><a href="auth.html" id="auth-nav-link">Log in</a>
+  </nav>
+</header>
+
+<section class="details-section">
+  <div class="details-container" id="listing-details">
+    <div class="details-loading">Loading listing details...</div>
+  </div>
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script>
+<script src="auth-ui.js"></script>
+<script>
+const params = new URLSearchParams(location.search);
+const listingId = params.get('id');
+const root = document.getElementById('listing-details');
+
+const JOB_CATEGORY_IMAGES = {
+  'Accounting & Finance / ሂሳብ እና ፋይናንስ':'images/jobs/accounting.jpg',
+  'Administration / አስተዳደር':'images/jobs/admin.jpg',
+  'Customer Service / የደንበኛ አገልግሎት':'images/jobs/customer-service.jpg',
+  'Data Entry / የዳታ ማስገቢያ':'images/jobs/data-entry.jpg',
+  'Sales & Marketing / ሽያጭ እና ማርኬቲንግ':'images/jobs/sales-marketing.jpg',
+  'Information Technology / ኢንፎርሜሽን ቴክኖሎጂ':'images/jobs/it.jpg',
+  'Engineering / ኢንጂነሪንግ':'images/jobs/engineering.jpg',
+  'Healthcare & Medical / ጤና እና ሕክምና':'images/jobs/healthcare.jpg',
+  'Education & Teaching / ትምህርት እና አስተማሪ':'images/jobs/education.jpg',
+  'Construction / ግንባታ':'images/jobs/construction.jpg',
+  'Human Resources / የሰው ሃብት':'images/jobs/hr.jpg',
+  'Banking & Insurance / ባንክ እና ኢንሹራንስ':'images/jobs/banking.jpg',
+  'Legal / ሕግ':'images/jobs/legal.jpg',
+  'Hospitality & Tourism / ሆቴል እና ቱሪዝም':'images/jobs/hospitality.jpg',
+  'Transportation & Logistics / ትራንስፖርት እና ሎጂስቲክስ':'images/jobs/transportation.jpg',
+  'Driving / ሹፌር':'images/jobs/driving.jpg',
+  'Manufacturing / ማምረት':'images/jobs/manufacturing.jpg',
+  'Agriculture & Farming / ግብርና':'images/jobs/agriculture.jpg',
+  'NGO & Development / ኤንጂኦ እና ልማት':'images/jobs/ngo.jpg',
+  'Security / ጥበቃ':'images/jobs/security.jpg',
+  'Retail & Shop / የሱቅ እና ችርቻሮ ስራ':'images/jobs/retail.jpg',
+  'Mechanic & Automotive / መካኒክ እና አውቶሞቲቭ':'images/jobs/mechanic.jpg',
+  'Electrician / ኤሌክትሪሺያን':'images/jobs/electrician.jpg',
+  'Cook & Chef / ምግብ አብሳይ እና ሼፍ':'images/jobs/cook.jpg',
+  'Cleaner & Housekeeping / የጽዳት እና የቤት አያያዝ':'images/jobs/cleaner.jpg',
+  'Domestic Worker / የቤት ሰራተኛ':'images/jobs/domestic-worker.jpg',
+  'Pharmacy / ፋርማሲ':'images/jobs/pharmacy.jpg',
+  'Graphic Design / ግራፊክ ዲዛይን':'images/jobs/graphic-design.jpg',
+  'Photography & Video / ፎቶግራፍ እና ቪዲዮ':'images/jobs/photography.jpg',
+  'Translation & Language / ትርጉም እና ቋንቋ':'images/jobs/translation.jpg',
+  'Freelance & Remote Work / ፍሪላንስ እና የርቀት ስራ':'images/jobs/freelance.jpg',
+  'Warehouse & Storekeeper / መጋዘን እና የመጋዘን ሰራተኛ':'images/jobs/warehouse.jpg',
+  'Procurement & Purchasing / ግዥ':'images/jobs/procurement.jpg',
+  'Research & Laboratory / ምርምር እና ላቦራቶሪ':'images/jobs/research.jpg',
+  'Social Work / ማህበራዊ ስራ':'images/jobs/social-work.jpg',
+  'Real Estate / ሪል እስቴት':'images/jobs/real-estate.jpg',
+  'Tailoring & Fashion / ስፌት እና ፋሽን':'images/jobs/tailoring.jpg',
+  'Beauty & Salon / የውበት እና ሳሎን ስራ':'images/jobs/beauty.jpg',
+  'Factory & Production / ፋብሪካ እና ምርት':'images/jobs/factory.jpg',
+  'Carpenter / የአናጢ ስራ':'images/jobs/carpenter.jpg',
+  'Welder / የብረት ብየዳ ስራ':'images/jobs/welder.jpg',
+  'Plumber / የቧንቧ ስራ':'images/jobs/plumber.jpg'
+};
+
+const escapeHtml = v => String(v ?? '').replace(/[&<>'"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
+function firstImage(v){
+  if(Array.isArray(v) && v.length) return v[0];
+  if(typeof v==='string' && v.trim()) { try { const p=JSON.parse(v); if(Array.isArray(p)&&p.length) return p[0]; } catch(e){} }
+  return '';
+}
+function jobImage(category){ return JOB_CATEGORY_IMAGES[category] || 'images/jobs/other.jpg'; }
+function locationText(x){ return [x.area,x.city].filter(Boolean).join(', ') || x.location || 'Location not specified'; }
+function moneyText(x){ return x.price || x.salary || 'Price negotiable'; }
+function whatsappUrl(number){ const n=String(number||'').replace(/[^0-9]/g,''); return n ? 'https://wa.me/'+n : ''; }
+function mapUrl(x){
+  if(x.latitude && x.longitude) return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(x.latitude+','+x.longitude)}`;
+  return 'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(locationText(x));
+}
+
+
+
+function renderListing(listing){
+  const isJob = String(listing.listing_type||listing.listingType).toLowerCase()==='job';
+  const mainImage = isJob ? jobImage(listing.category) : firstImage(listing.image_urls);
+  const location = locationText(listing);
+  const category = listing.category || listing.property_type || (isJob?'Job Opportunity':'Property');
+  const price = moneyText(listing);
+  const title = listing.title || (isJob?'Job Opportunity':'Property for Rent');
+  const gallery = !isJob && Array.isArray(listing.image_urls) ? listing.image_urls.filter(Boolean) : [];
+  const galleryHtml = gallery.length ? `<div class="gallery">${gallery.slice(0,5).map((url,i)=>`<div class="gallery-item"><img src="${escapeHtml(url)}" alt="${escapeHtml(title)} photo ${i+1}" onerror="this.parentElement.style.display='none'"></div>`).join('')}</div>` : '';
+  const heroImg = mainImage || 'images/backgrounds/addis-ababa.jpg';
+  const requirements = listing.requirements || [];
+  const applicationMethods = Array.isArray(listing.application_methods)
+    ? listing.application_methods.filter(Boolean)
+    : (listing.application_methods ? [listing.application_methods] : []);
+  const selectedApplicationMethod = applicationMethods[0] || '';
+  const emailIsGmail = String(listing.email || '').toLowerCase().endsWith('@gmail.com');
+  const applicationMethodLabel = selectedApplicationMethod === 'Email'
+    ? (emailIsGmail ? 'Apply through Gmail' : 'Apply through Email')
+    : selectedApplicationMethod === 'Phone'
+      ? 'Apply through Phone'
+      : selectedApplicationMethod === 'WhatsApp'
+        ? 'Apply through WhatsApp'
+        : selectedApplicationMethod === 'Company Website'
+          ? 'Apply through Company Website'
+          : selectedApplicationMethod === 'In Person'
+            ? 'Apply in Person'
+            : 'Not specified';
+  const contactButtons = [
+    listing.phone ? `<a class="contact-button" href="tel:${escapeHtml(listing.phone)}">📞 Call</a>` : '',
+    listing.whatsapp ? `<a class="contact-button" href="${whatsappUrl(listing.whatsapp)}" target="_blank" rel="noopener">💬 WhatsApp</a>` : '',
+    listing.email ? `<a class="contact-button" href="mailto:${escapeHtml(listing.email)}">📧 Email</a>` : ''
+  ].filter(Boolean).join('');
+  const details = isJob ? `
+    <div class="details-info-card">
+      <h3>📋 Job Information</h3>
+      <div class="details-info">
+        <div class="detail-item"><strong>Category</strong><span>${escapeHtml(category)}</span></div>
+        <div class="detail-item"><strong>Employment</strong><span>${escapeHtml(listing.employment_type || 'Not specified')}</span></div>
+        <div class="detail-item"><strong>Education</strong><span>${escapeHtml(listing.education || 'Not specified')}</span></div>
+        <div class="detail-item"><strong>Experience</strong><span>${escapeHtml(listing.experience || 'Not specified')}</span></div>
+        <div class="detail-item"><strong>Salary</strong><span class="details-price">${escapeHtml(price)}</span></div>
+        <div class="detail-item"><strong>Location</strong><span>${escapeHtml(location)}</span></div>
+        <div class="detail-item"><strong>Vacancy Expire Date</strong><span>${escapeHtml(listing.expire_at ? new Date(listing.expire_at).toLocaleDateString() : 'Not specified')}</span></div>
+        <div class="detail-item"><strong>Application Method</strong><span>${escapeHtml(applicationMethodLabel)}</span></div>
+        ${listing.company_website ? `<div class="detail-item"><strong>Company Website</strong><span><a href="${escapeHtml(listing.company_website)}" target="_blank" rel="noopener">Visit Website</a></span></div>` : ''}
+      </div>
+    </div>` : `
+    <div class="details-info-card">
+      <h3>🏠 Property Information</h3>
+      <div class="details-info">
+        <div class="detail-item"><strong>Property Type</strong><span>${escapeHtml(listing.property_type || category || 'Property')}</span></div>
+        <div class="detail-item"><strong>Rent</strong><span class="details-price">${escapeHtml(price)}</span></div>
+        <div class="detail-item"><strong>Bedrooms</strong><span>${escapeHtml(listing.bedrooms || 'Not specified')}</span></div>
+        <div class="detail-item"><strong>Furnished</strong><span>${escapeHtml(listing.furnished || 'Not specified')}</span></div>
+        <div class="detail-item"><strong>Location</strong><span>${escapeHtml(location)}</span></div>
+        <div class="detail-item"><strong>Posted</strong><span>${escapeHtml(listing.posted_at ? new Date(listing.posted_at).toLocaleDateString() : 'Recently')}</span></div>
+      </div>
+    </div>`;
+
+  root.innerHTML = `
+    <div class="details-hero">
+      <img src="${escapeHtml(heroImg)}" alt="${escapeHtml(title)}" onerror="this.src='images/backgrounds/addis-ababa.jpg'">
+      <div class="details-hero-content">
+        <span class="details-badge">${isJob?'💼 Job Vacancy':'🏠 Home / Property for Rent'}</span>
+        <h2 class="details-title">${escapeHtml(title)}</h2>
+        <p class="details-subtitle">📍 ${escapeHtml(location)} &nbsp; • &nbsp; ${escapeHtml(category)}</p>
+      </div>
+    </div>
+    <div class="details-body">
+      ${galleryHtml}
+      <div class="details-top-grid">
+        <div>
+          <h3>📝 Description</h3>
+          <p class="description">${escapeHtml(listing.description || 'No description was provided for this listing.')}</p>
+          ${isJob && requirements.length ? `<hr class="details-divider"><h3>✅ Requirements</h3><ul class="details-list">${requirements.map(r=>`<li>${escapeHtml(r)}</li>`).join('')}</ul>`:''}
+          ${details}
+        </div>
+        <aside>
+          <h3>📞 Contact</h3>
+          <div class="contact-box">
+            ${listing.phone ? `<p>📞 <strong>Phone:</strong> ${escapeHtml(listing.phone)}</p>`:''}
+            ${listing.email ? `<p>📧 <strong>Email:</strong> ${escapeHtml(listing.email)}</p>`:''}
+            ${listing.whatsapp ? `<p>💬 <strong>WhatsApp:</strong> ${escapeHtml(listing.whatsapp)}</p>`:''}
+            ${contactButtons ? `<div class="contact-buttons">${contactButtons}</div>`:'<p>No contact information was provided.</p>'}
+          </div>
+          <hr class="details-divider">
+          <h3>🗺️ Location</h3>
+          <div class="map-box">
+            <p class="map-location">📍 ${escapeHtml(location)}</p>
+            <a class="map-button" href="${mapUrl(listing)}" target="_blank" rel="noopener">📍 View on Map</a>
+          </div>
+        </aside>
+      </div>
+      <a href="javascript:history.back()" class="back-button">← Back to Listings</a>
+    </div>`;
+}
+
+async function loadDetails(){
+  if(!listingId){ root.innerHTML='<div class="details-error"><h2>Listing Not Found</h2><p>No listing ID was provided.</p><a class="view-details" href="index.html">← Back to EthioLifeLink</a></div>'; return; }
+  try{
+    const {data,error}=await window.supabaseClient.from('listings').select('*').eq('id',listingId).eq('status','approved').maybeSingle();
+    if(error) throw error;
+    if(!data){ root.innerHTML='<div class="details-error"><h2>Listing Not Found</h2><p>This listing may not exist or may not have been approved yet.</p><a class="view-details" href="jobs.html">← Back to Listings</a></div>'; return; }
+    renderListing(data);
+  }catch(error){
+    console.error('DETAILS LOAD ERROR:',error);
+    root.innerHTML=`<div class="details-error"><h2>Could not load listing</h2><p>${escapeHtml(error.message||'Please try again.')}</p><a class="view-details" href="index.html">← Back to EthioLifeLink</a></div>`;
+  }
+}
+loadDetails();
+</script>
+</body>
+</html>

@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+
+<html lang="en"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>EthioLifeLink - Admin Dashboard</title>
+
+<link rel="stylesheet" href="css/style.css">
+
+<!-- Supabase -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script>
+
+<style>
+
+    .admin-container {
+        max-width: 1100px;
+        margin: 40px auto;
+        padding: 20px;
+    }
+
+    .admin-header {
+        margin-bottom: 30px;
+    }
+
+    .admin-actions {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-bottom: 25px;
+    }
+
+    .admin-button {
+        border: none;
+        padding: 12px 18px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 15px;
+    }
+
+    .refresh-button {
+        background: #2563eb;
+        color: white;
+    }
+
+    .logout-button {
+        background: #dc2626;
+        color: white;
+    }
+
+    .listing-card {
+        background: white;
+        border: 1px solid #ddd;
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+
+    .listing-card h3 {
+        margin-top: 0;
+    }
+
+    .listing-info {
+        margin: 8px 0;
+    }
+
+    .pending-status {
+        display: inline-block;
+        background: #fef3c7;
+        color: #92400e;
+        padding: 5px 10px;
+        border-radius: 20px;
+        font-weight: bold;
+    }
+
+    .approved-status {
+        display: inline-block;
+        background: #dcfce7;
+        color: #166534;
+        padding: 5px 10px;
+        border-radius: 20px;
+        font-weight: bold;
+    }
+
+    .rejected-status {
+        display: inline-block;
+        background: #fee2e2;
+        color: #991b1b;
+        padding: 5px 10px;
+        border-radius: 20px;
+        font-weight: bold;
+    }
+
+    .listing-actions {
+        display: flex;
+        gap: 10px;
+        margin-top: 18px;
+        flex-wrap: wrap;
+    }
+
+    .approve-button {
+        background: #16a34a;
+        color: white;
+        border: none;
+        padding: 10px 16px;
+        border-radius: 7px;
+        cursor: pointer;
+    }
+
+    .reject-button {
+        background: #dc2626;
+        color: white;
+        border: none;
+        padding: 10px 16px;
+        border-radius: 7px;
+        cursor: pointer;
+    }
+
+    .empty-message {
+        padding: 25px;
+        background: #f3f4f6;
+        border-radius: 10px;
+        text-align: center;
+    }
+
+    .error-message {
+        padding: 20px;
+        background: #fee2e2;
+        color: #991b1b;
+        border-radius: 10px;
+    }
+
+    .loading-message {
+        padding: 20px;
+        background: #f3f4f6;
+        border-radius: 10px;
+    }
+
+</style>
+
+    <link rel="icon" type="image/jpeg" href="images/site-icon.jpg">
+</head>
+
+<body>
+
+<header>
+
+<div class="logo logo-with-icon">
+    <a href="index.html" class="logo-icon-link" aria-label="EthioLifeLink home"><img src="images/site-icon.jpg" alt="EthioLifeLink logo"></a>
+    <div><h1>EthioLifeLink</h1><p>Job Vacancy and Home for Rent</p></div>
+</div>
+
+<nav>
+    <a href="index.html">Home</a>
+    <a href="jobs.html">Jobs</a>
+    <a href="homes.html">Homes</a>
+    <a href="add-listing.html">Add Listing</a>
+</nav>
+
+</header>
+
+<main>
+
+<div class="admin-container">
+
+    <div class="admin-header">
+
+        <h2>Admin Dashboard</h2>
+
+        <p>
+            Review submitted job vacancies and homes before they are published.
+        </p>
+
+    </div>
+
+
+    <div class="admin-actions">
+
+        <button
+            type="button"
+            class="admin-button refresh-button"
+            onclick="loadPendingListings()"
+        >
+            🔄 Refresh Listings
+        </button>
+
+
+        <button
+            type="button"
+            class="admin-button logout-button"
+            onclick="logoutAdmin()"
+        >
+            🚪 Logout
+        </button>
+
+    </div>
+
+
+    <div id="listingsContainer">
+
+        <div class="loading-message">
+            Loading pending listings...
+        </div>
+
+    </div>
+
+</div>
+
+</main>
+
+<script>
+const ADMIN_EMAIL = "mosisahailu196@gmail.com";
+
+/* ========================================== ADMIN ACCESS GUARD ========================================== */
+async function requireAdmin() {
+    if (!window.supabaseClient) {
+        window.location.replace("admin-login.html");
+        return false;
+    }
+
+    // The dashboard may only be entered after completing admin-login.html
+    // in this browser tab. A previously saved Supabase session alone is not enough.
+    const loginCompleted = sessionStorage.getItem("ethioLifeLinkAdminAuthorized") === "true";
+    if (!loginCompleted) {
+        window.location.replace("admin-login.html");
+        return false;
+    }
+
+    try {
+        const { data, error } = await window.supabaseClient.auth.getUser();
+        const user = data && data.user;
+
+        if (error || !user || !user.email || user.email.toLowerCase() !== ADMIN_EMAIL.toLowerCase()) {
+            sessionStorage.removeItem("ethioLifeLinkAdminAuthorized");
+            await window.supabaseClient.auth.signOut();
+            window.location.replace("admin-login.html");
+            return false;
+        }
+
+        return true;
+    } catch (error) {
+        console.error("ADMIN AUTH CHECK ERROR:", error);
+        sessionStorage.removeItem("ethioLifeLinkAdminAuthorized");
+        window.location.replace("admin-login.html");
+        return false;
+    }
+}
+
+/* ========================================== CHECK SUPABASE ========================================== */ function checkSupabase() { if (!window.supabaseClient) { document.getElementById( "listingsContainer" ).innerHTML = ` <div class="error-message"> ❌ Supabase client is not connected. <br><br> Please check supabase.js. </div> `; return false; } return true; } /* ========================================== LOAD PENDING LISTINGS ========================================== */ async function loadPendingListings() { const container = document.getElementById( "listingsContainer" ); if (!checkSupabase()) { return; } container.innerHTML = ` <div class="loading-message"> ⏳ Loading pending listings... </div> `; try { /* IMPORTANT: Do NOT use created_at. Your table does not have created_at. We use id instead. */ const { data, error } = await window.supabaseClient .from("listings") .select("*") .eq("status", "pending") .order("id", { ascending: false }); if (error) { console.error( "ADMIN LISTINGS ERROR:", error ); container.innerHTML = ` <div class="error-message"> ❌ Could not load pending listings. <br><br> <strong>Error:</strong> ${escapeHtml(error.message)} </div> `; return; } if (!data || data.length === 0) { container.innerHTML = ` <div class="empty-message"> ✅ No pending listings. <br><br> New job vacancies and homes will appear here after submission. </div> `; return; } container.innerHTML = ""; data.forEach(function(listing) { container.appendChild( createListingCard(listing) ); }); } catch (error) { console.error( "ADMIN PAGE ERROR:", error ); container.innerHTML = ` <div class="error-message"> ❌ Something went wrong while loading listings. <br><br> ${escapeHtml(error.message)} </div> `; } } /* ========================================== CREATE LISTING CARD ========================================== */ function createListingCard(listing) { const card = document.createElement("div"); card.className = "listing-card"; const listingType = listing.listing_type === "job" ? "💼 Job Vacancy" : "🏠 Home for Rent"; let extraInformation = ""; if (listing.listing_type === "job") { extraInformation = ` <div class="listing-info"> <strong>Category:</strong> ${escapeHtml(listing.category || "Not provided")} </div> <div class="listing-info"> <strong>Employment:</strong> ${escapeHtml(listing.employment_type || "Not provided")} </div> <div class="listing-info"> <strong>Salary:</strong> ${escapeHtml(listing.salary || "Negotiable")} </div> <div class="listing-info"> <strong>Education:</strong> ${escapeHtml(listing.education || "Not provided")} </div> <div class="listing-info"> <strong>Experience:</strong> ${escapeHtml(listing.experience || "Not provided")} </div> `; } else { extraInformation = ` <div class="listing-info"> <strong>Category:</strong> ${escapeHtml(listing.category || "Not provided")} </div> <div class="listing-info"> <strong>Property Type:</strong> ${escapeHtml(listing.property_type || "Not provided")} </div> <div class="listing-info"> <strong>Rent:</strong> ${listing.price != null ? escapeHtml(String(listing.price)) + " ETB/month" : "Not provided"} </div> <div class="listing-info"> <strong>Bedrooms:</strong> ${escapeHtml(listing.bedrooms || "Not provided")} </div> <div class="listing-info"> <strong>Furnished:</strong> ${escapeHtml(listing.furnished || "Not provided")} </div> `; } card.innerHTML = ` <h3> ${escapeHtml(listing.title || "Untitled Listing")} </h3> <div class="listing-info"> <strong>Type:</strong> ${listingType} </div> <div class="listing-info"> <strong>City:</strong> ${escapeHtml(listing.city || "Not provided")} </div> <div class="listing-info"> <strong>Area:</strong> ${escapeHtml(listing.area || "Not provided")} </div> ${extraInformation} <div class="listing-info"> <strong>Phone:</strong> ${escapeHtml(listing.phone || "Not provided")} </div> <div class="listing-info"> <strong>Email:</strong> ${escapeHtml(listing.email || "Not provided")} </div> <div class="listing-info"> <strong>Description:</strong> <br> ${escapeHtml(listing.description || "No description")} </div> <div class="listing-info"> <strong>Status:</strong> <span class="pending-status"> ${escapeHtml(listing.status)} </span> </div> <div class="listing-info"> <strong>ID:</strong> ${escapeHtml(String(listing.id))} </div> <div class="listing-actions"> <button type="button" class="approve-button" onclick="approveListing(${Number(listing.id)})" > ✅ Approve </button> <button type="button" class="reject-button" onclick="rejectListing(${Number(listing.id)})" > ❌ Reject </button> </div> `; return card; } /* ========================================== APPROVE LISTING ========================================== */ async function approveListing(id) { const confirmed = confirm( "Are you sure you want to approve this listing?" ); if (!confirmed) { return; } try { const { error } = await window.supabaseClient .from("listings") .update({ status: "approved", posted_at: new Date().toISOString() }) .eq("id", id); if (error) { alert( "❌ Approval failed:\n\n" + error.message ); console.error( "APPROVE ERROR:", error ); return; } alert( "✅ Listing approved successfully." ); loadPendingListings(); } catch (error) { alert( "❌ Approval failed:\n\n" + error.message ); } } /* ========================================== REJECT LISTING ========================================== */ async function rejectListing(id) { const confirmed = confirm( "Are you sure you want to reject this listing?" ); if (!confirmed) { return; } try { const { error } = await window.supabaseClient .from("listings") .update({ status: "rejected" }) .eq("id", id); if (error) { alert( "❌ Rejection failed:\n\n" + error.message ); console.error( "REJECT ERROR:", error ); return; } alert( "Listing rejected." ); loadPendingListings(); } catch (error) { alert( "❌ Rejection failed:\n\n" + error.message ); } } /* ========================================== LOGOUT ========================================== */ async function logoutAdmin() {
+    sessionStorage.removeItem("ethioLifeLinkAdminAuthorized"); if (!window.supabaseClient) { return; } try { await window.supabaseClient.auth.signOut(); } catch (error) { console.error( "LOGOUT ERROR:", error ); } window.location.href = "admin-login.html"; } /* ========================================== SAFE TEXT ========================================== */ function escapeHtml(value) { if (value === null || value === undefined) { return ""; } return String(value) .replace(/&/g, "&amp;") .replace(/</g, "&lt;") .replace(/>/g, "&gt;") .replace(/"/g, "&quot;") .replace(/'/g, "&#039;"); } /* ========================================== PAGE LOAD ========================================== */ /* IMPORTANT: We load the listings directly when the page opens. We do NOT make the listing request wait for the authentication check. */ document.addEventListener("DOMContentLoaded", async function() {
+    const allowed = await requireAdmin();
+    if (allowed) {
+        loadPendingListings();
+    }
+}); </script>
+
+</body> </html>

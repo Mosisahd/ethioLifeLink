@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
+    <title>EthioLifeLink - Job Vacancy and Home for Rent</title>
+    <link rel="icon" type="image/jpeg" href="images/site-icon.jpg">
+</head>
+
+<body>
+
+    <!-- HEADER / NAVIGATION -->
+    <header class="navbar">
+
+        <div class="logo logo-with-icon">
+            <a href="index.html" class="logo-icon-link" aria-label="EthioLifeLink home"><img src="images/site-icon.jpg" alt="EthioLifeLink logo"></a>
+            <div><h1>EthioLifeLink</h1><span>Job Vacancy and Home for Rent</span></div>
+        </div>
+
+       <nav>
+    <a href="index.html">Home</a>
+    <a href="jobs.html">Jobs</a>
+    <a href="homes.html">Homes</a>
+    <a href="add-listing.html">Add Listing</a>
+    <a href="auth.html" id="auth-nav-link">Log in</a>
+</nav>
+
+    </header>
+
+
+    <!-- HERO SECTION -->
+    <section class="hero">
+
+        <img class="page-brand-icon" src="images/site-icon.jpg" alt="EthioLifeLink logo">
+        <h2>Find Jobs & Homes in Ethiopia</h2>
+
+        <p>
+            Discover job opportunities and homes for rent across Ethiopia.
+        </p>
+
+        <div class="hero-buttons">
+            <a href="jobs.html" class="btn">💼 Find Jobs</a>
+<a href="homes.html" class="btn">🏠 Find Homes</a>
+        </div>
+
+    </section>
+
+
+    <!-- EXPLORE BY CITY -->
+    <section class="cities">
+
+        <div class="section-title">
+            <h2>Explore by City</h2>
+
+            <a href="javascript:void(0)" class="see-more" onclick="scrollCities()">
+                See more cities →
+            </a>
+        </div>
+
+
+        <!-- ETHIOPIAN CITIES -->
+        <div class="city-list" id="city-list">
+
+            <!-- FIRST VISIBLE CITIES -->
+            <a href="javascript:void(0)" class="city-card" onclick="showAddisAreas()">
+                Addis Ababa
+            </a>
+
+            <a href="#" class="city-card">Adama</a>
+            <a href="#" class="city-card">Bishoftu</a>
+            <a href="#" class="city-card">Hawassa</a>
+            <a href="#" class="city-card">Bahir Dar</a>
+
+            <!-- MORE CITIES -->
+            <a href="#" class="city-card">Mekelle</a>
+            <a href="#" class="city-card">Gondar</a>
+            <a href="#" class="city-card">Dire Dawa</a>
+            <a href="#" class="city-card">Jimma</a>
+            <a href="#" class="city-card">Dessie</a>
+            <a href="#" class="city-card">Shashamane</a>
+            <a href="#" class="city-card">Arba Minch</a>
+            <a href="#" class="city-card">Wolaita Sodo</a>
+            <a href="#" class="city-card">Nekemte</a>
+            <a href="#" class="city-card">Debre Birhan</a>
+            <a href="#" class="city-card">Debre Markos</a>
+            <a href="#" class="city-card">Harar</a>
+            <a href="#" class="city-card">Axum</a>
+            <a href="#" class="city-card">Dilla</a>
+            <a href="#" class="city-card">Jijiga</a>
+            <a href="#" class="city-card">Debre Tabor</a>
+            <a href="#" class="city-card">Hosanna</a>
+            <a href="#" class="city-card">Woldiya</a>
+            <a href="#" class="city-card">Adigrat</a>
+            <a href="#" class="city-card">Butajira</a>
+            <a href="#" class="city-card">Ambo</a>
+            <a href="#" class="city-card">Bedele</a>
+            <a href="#" class="city-card">Assela</a>
+            <a href="#" class="city-card">Kombolcha</a>
+
+        </div>
+
+
+        <!-- ADDIS ABABA AREAS -->
+        <div id="addis-areas" style="display: none;">
+
+            <h3>Addis Ababa & Surrounding Areas</h3>
+
+
+            <!-- WITHIN ADDIS ABABA -->
+            <h4>Within Addis Ababa</h4>
+
+            <div class="city-list">
+
+                <a href="#" class="city-card">Bole</a>
+                <a href="#" class="city-card">Kazanchis</a>
+                <a href="#" class="city-card">Saris</a>
+                <a href="#" class="city-card">Megenagna</a>
+                <a href="#" class="city-card">CMC</a>
+                <a href="#" class="city-card">Piassa</a>
+                <a href="#" class="city-card">Mexico</a>
+                <a href="#" class="city-card">Gerji</a>
+                <a href="#" class="city-card">Jemo</a>
+                <a href="#" class="city-card">Kaliti</a>
+                <a href="#" class="city-card">Kera</a>
+                <a href="#" class="city-card">Lafto</a>
+                <a href="#" class="city-card">Gofa</a>
+                <a href="#" class="city-card">Ayat</a>
+                <a href="#" class="city-card">Summit</a>
+                <a href="#" class="city-card">Shiromeda</a>
+                <a href="#" class="city-card">Shola</a>
+                <a href="#" class="city-card">Yeka</a>
+                <a href="#" class="city-card">Kotebe</a>
+                <a href="#" class="city-card">Makanisa</a>
+                <a href="#" class="city-card">Lebu</a>
+                <a href="#" class="city-card">Akaki</a>
+
+            </div>
+
+
+            <!-- AROUND ADDIS ABABA -->
+            <h4>Around Addis Ababa</h4>
+
+            <div class="city-list">
+
+                <a href="#" class="city-card">Burayu</a>
+                <a href="#" class="city-card">Sebeta</a>
+                <a href="#" class="city-card">Sheger</a>
+                <a href="#" class="city-card">Koye</a>
+                <a href="#" class="city-card">Tulu Dimtu</a>
+                <a href="#" class="city-card">Sululta</a>
+                <a href="#" class="city-card">Gelan</a>
+
+            </div>
+
+        </div>
+
+    </section><!-- LATEST JOBS -->
+<section class="latest-section">
+    <div class="section-title">
+        <h2>Latest Job Vacancies</h2>
+        <a href="jobs.html" class="see-more">See all jobs →</a>
+    </div>
+    <div id="latest-jobs-list" class="listing-list">
+        <div class="listing-card"><p>Loading approved jobs...</p></div>
+    </div>
+</section>
+
+<!-- LATEST HOMES -->
+<section class="latest-section">
+    <div class="section-title">
+        <h2>Latest Homes for Rent</h2>
+        <a href="homes.html" class="see-more">See all homes →</a>
+    </div>
+    <div id="latest-homes-list" class="listing-list">
+        <div class="listing-card"><p>Loading approved homes...</p></div>
+    </div>
+</section>
+
+<!-- JAVASCRIPT -->
+<script>
+function showAddisAreas() {
+    const section = document.getElementById("addis-areas");
+    if (section) section.style.display = "block";
+}
+function scrollCities() {
+    const list = document.getElementById("city-list");
+    if (list) list.scrollBy({ left: 500, behavior: "smooth" });
+}
+
+function escapeHtml(value) {
+    return String(value ?? "").replace(/[&<>"']/g, function (char) {
+        return {
+            "&": "&amp;",
+            "<": "&lt;",
+            ">": "&gt;",
+            '"': "&quot;",
+            "'": "&#039;"
+        }[char];
+    });
+}
+
+function formatLocation(item) {
+    return [item.area, item.city].filter(Boolean).join(", ") || "Ethiopia";
+}
+
+function formatPrice(item, isJob) {
+    if (isJob) return item.salary ? "💰 Salary: " + escapeHtml(item.salary) : "💰 Salary: Negotiable";
+    return item.price ? "💰 " + escapeHtml(item.price) : "💰 Price negotiable";
+}
+
+function renderLatestJobs(jobs) {
+    const box = document.getElementById("latest-jobs-list");
+    if (!jobs.length) {
+        box.innerHTML = '<div class="listing-card"><h3>No approved jobs yet</h3><p>New approved job vacancies will appear here.</p><a class="btn" href="add-listing.html">Add a Job Vacancy</a></div>';
+        return;
+    }
+
+    box.innerHTML = jobs.slice(0, 4).map(function (job) {
+        return '<article class="listing-card">' +
+            '<h3>' + escapeHtml(job.title || "Job Vacancy") + '</h3>' +
+            '<p>📍 ' + escapeHtml(formatLocation(job)) + '</p>' +
+            '<p>💼 ' + escapeHtml(job.employment_type || "Employment type not specified") + '</p>' +
+            formatPrice(job, true) +
+            '<a href="details.html?id=' + encodeURIComponent(job.id) + '" class="view-details">View Details</a>' +
+            '</article>';
+    }).join("");
+}
+
+function renderLatestHomes(homes) {
+    const box = document.getElementById("latest-homes-list");
+    if (!homes.length) {
+        box.innerHTML = '<div class="listing-card"><h3>No approved homes yet</h3><p>New approved rental listings will appear here.</p><a class="btn" href="add-listing.html">Add a Home for Rent</a></div>';
+        return;
+    }
+
+    box.innerHTML = homes.slice(0, 4).map(function (home) {
+        return '<article class="listing-card">' +
+            '<h3>' + escapeHtml(home.title || "Property for Rent") + '</h3>' +
+            '<p>🏠 ' + escapeHtml(home.property_type || "Property") + '</p>' +
+            '<p>📍 ' + escapeHtml(formatLocation(home)) + '</p>' +
+            formatPrice(home, false) +
+            '<a href="details.html?id=' + encodeURIComponent(home.id) + '" class="view-details">View Details</a>' +
+            '</article>';
+    }).join("");
+}
+
+async function loadLatestListings() {
+    const jobsBox = document.getElementById("latest-jobs-list");
+    const homesBox = document.getElementById("latest-homes-list");
+
+    if (!window.supabaseClient) {
+        jobsBox.innerHTML = '<div class="listing-card"><h3>Unable to load jobs</h3><p>Please try again later.</p></div>';
+        homesBox.innerHTML = '<div class="listing-card"><h3>Unable to load homes</h3><p>Please try again later.</p></div>';
+        return;
+    }
+
+    try {
+        const results = await Promise.all([
+            window.supabaseClient.from("listings")
+                .select("id,listing_type,title,property_type,city,area,employment_type,salary,price,company_website,expire_at,posted_at")
+                .eq("listing_type", "job")
+                .eq("status", "approved")
+                .order("posted_at", { ascending: false })
+                .limit(4),
+
+            window.supabaseClient.from("listings")
+                .select("id,listing_type,title,property_type,city,area,price,posted_at")
+                .eq("listing_type", "home")
+                .eq("status", "approved")
+                .order("posted_at", { ascending: false })
+                .limit(4)
+        ]);
+
+        if (results[0].error) throw results[0].error;
+        if (results[1].error) throw results[1].error;
+
+        renderLatestJobs((results[0].data || []).filter(job => !job.expire_at || new Date(job.expire_at) >= new Date()));
+        renderLatestHomes(results[1].data || []);
+    } catch (error) {
+        console.error("LATEST LISTINGS ERROR:", error);
+        jobsBox.innerHTML = '<div class="listing-card"><h3>Could not load jobs</h3><p>Please try again later.</p></div>';
+        homesBox.innerHTML = '<div class="listing-card"><h3>Could not load homes</h3><p>Please try again later.</p></div>';
+    }
+}
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script>
+<script src="auth-ui.js"></script>
+<script>
+loadLatestListings();
+</script>
+</body> </html>

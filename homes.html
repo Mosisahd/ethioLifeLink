@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>EthioLifeLink - Job Vacancy and Home for Rent</title>
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" type="image/jpeg" href="images/site-icon.jpg">
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <header class="navbar">
+
+        <div class="logo logo-with-icon">
+            <a href="index.html" class="logo-icon-link" aria-label="EthioLifeLink home"><img src="images/site-icon.jpg" alt="EthioLifeLink logo"></a>
+            <div><h1>EthioLifeLink</h1><span>Job Vacancy and Home for Rent</span></div>
+        </div>
+
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="jobs.html">Jobs</a>
+            <a href="homes.html">Homes</a>
+            <a href="add-listing.html">Add Listing</a>
+    <a href="auth.html" id="auth-nav-link">Log in</a>
+
+        </nav>
+
+    </header>
+
+
+    <!-- HOMES INTRO -->
+    <section class="hero">
+
+        <span class="page-kicker">🏠 EthioLifeLink Homes</span>
+        <h2>Find a Home or Property in Ethiopia</h2>
+        <p>Explore approved homes and rental properties by city and type.</p>
+
+    </section>
+
+
+    <!-- PROPERTY TYPES -->
+    <section class="cities">
+
+        <div class="section-title">
+            <h2>Property Type</h2>
+        </div>
+
+        <div class="city-list">
+
+            <a href="#" class="city-card"
+               onclick="filterCategory('Living'); return false;">
+                🏠 Living
+            </a>
+
+            <a href="#" class="city-card"
+               onclick="filterCategory('Shop'); return false;">
+                🏪 Shop
+            </a>
+
+            <a href="#" class="city-card"
+               onclick="filterCategory('Bank'); return false;">
+                🏦 Bank
+            </a>
+
+            <a href="#" class="city-card"
+               onclick="filterCategory('Office'); return false;">
+                🏢 Office
+            </a>
+
+            <a href="#" class="city-card"
+               onclick="filterCategory('Warehouse'); return false;">
+                🏭 Warehouse
+            </a>
+
+            <a href="#" class="city-card"
+               onclick="filterCategory('Commercial'); return false;">
+                🏬 Commercial
+            </a>
+
+            <a href="#" class="city-card"
+               onclick="filterCategory('Restaurant'); return false;">
+                🍽️ Restaurant
+            </a>
+
+            <a href="#" class="city-card"
+               onclick="showAllHomes(); return false;">
+                🔄 All Homes
+            </a>
+
+        </div>
+
+    </section>
+
+
+    <!-- CITIES -->
+    <section class="cities">
+
+        <div class="section-title">
+            <h2>Choose City</h2>
+        </div>
+
+        <div class="city-list">
+
+            <a href="#" class="city-card"
+               onclick="filterCity('Addis Ababa'); return false;">
+                Addis Ababa
+            </a>
+
+            <a href="#" class="city-card"
+               onclick="filterCity('Adama'); return false;">
+                Adama
+            </a>
+
+            <a href="#" class="city-card"
+               onclick="filterCity('Bishoftu'); return false;">
+                Bishoftu
+            </a>
+
+            <a href="#" class="city-card"
+               onclick="filterCity('Hawassa'); return false;">
+                Hawassa
+            </a>
+
+            <a href="#" class="city-card"
+               onclick="filterCity('Bahir Dar'); return false;">
+                Bahir Dar
+            </a>
+
+            <a href="#" class="city-card"
+               onclick="filterCity('Mekelle'); return false;">
+                Mekelle
+            </a>
+
+            <a href="#" class="city-card"
+               onclick="filterCity('Gondar'); return false;">
+                Gondar
+            </a>
+
+            <a href="#" class="city-card"
+               onclick="filterCity('Dire Dawa'); return false;">
+                Dire Dawa
+            </a>
+
+            <a href="#" class="city-card"
+               onclick="filterCity('Jimma'); return false;">
+                Jimma
+            </a>
+
+            <a href="#" class="city-card"
+               onclick="filterCity('Dessie'); return false;">
+                Dessie
+            </a>
+
+            <a href="#" class="city-card"
+               onclick="filterCity('Shashamane'); return false;">
+                Shashamane
+            </a>
+
+            <a href="#" class="city-card"
+               onclick="filterCity('Arba Minch'); return false;">
+                Arba Minch
+            </a>
+
+            <a href="#" class="city-card"
+               onclick="filterCity('Wolaita Sodo'); return false;">
+                Wolaita Sodo
+            </a>
+
+            <a href="#" class="city-card"
+               onclick="filterCity('Nekemte'); return false;">
+                Nekemte
+            </a>
+
+            <a href="#" class="city-card"
+               onclick="filterCity('Debre Birhan'); return false;">
+                Debre Birhan
+            </a>
+
+            <a href="#" class="city-card"
+               onclick="filterCity('Debre Markos'); return false;">
+                Debre Markos
+            </a>
+
+            <a href="#" class="city-card"
+               onclick="filterCity('Harar'); return false;">
+                Harar
+            </a>
+
+            <a href="#" class="city-card"
+               onclick="filterCity('Axum'); return false;">
+                Axum
+            </a>
+
+            <a href="#" class="city-card"
+               onclick="filterCity('Dilla'); return false;">
+                Dilla
+            </a>
+
+            <a href="#" class="city-card"
+               onclick="filterCity('Jijiga'); return false;">
+                Jijiga
+            </a>
+
+            <a href="#" class="city-card"
+               onclick="filterCity('Debre Tabor'); return false;">
+                Debre Tabor
+            </a>
+
+            <a href="#" class="city-card"
+               onclick="filterCity('Hosanna'); return false;">
+                Hosanna
+            </a>
+
+            <a href="#" class="city-card"
+               onclick="filterCity('Woldiya'); return false;">
+                Woldiya
+            </a>
+
+            <a href="#" class="city-card"
+               onclick="filterCity('Adigrat'); return false;">
+                Adigrat
+            </a>
+
+            <a href="#" class="city-card"
+               onclick="filterCity('Butajira'); return false;">
+                Butajira
+            </a>
+
+            <a href="#" class="city-card"
+               onclick="filterCity('Ambo'); return false;">
+                Ambo
+            </a>
+
+            <a href="#" class="city-card"
+               onclick="filterCity('Bedele'); return false;">
+                Bedele
+            </a>
+
+            <a href="#" class="city-card"
+               onclick="filterCity('Assela'); return false;">
+                Assela
+            </a>
+
+            <a href="#" class="city-card"
+               onclick="filterCity('Kombolcha'); return false;">
+                Kombolcha
+            </a>
+
+        </div>
+
+
+        <!-- ADDIS ABABA AREAS -->
+        <div id="addis-areas" style="display: none; margin-top: 35px;">
+
+            <h3>Addis Ababa & Surrounding Areas</h3>
+
+            <div class="city-list">
+
+                <a href="#" class="city-card"
+                   onclick="filterArea('Bole'); return false;">
+                    Bole
+                </a>
+
+                <a href="#" class="city-card"
+                   onclick="filterArea('Kazanchis'); return false;">
+                    Kazanchis
+                </a>
+
+                <a href="#" class="city-card"
+                   onclick="filterArea('Saris'); return false;">
+                    Saris
+                </a>
+
+                <a href="#" class="city-card"
+                   onclick="filterArea('Megenagna'); return false;">
+                    Megenagna
+                </a>
+
+                <a href="#" class="city-card"
+                   onclick="filterArea('CMC'); return false;">
+                    CMC
+                </a>
+
+                <a href="#" class="city-card"
+                   onclick="filterArea('Piassa'); return false;">
+                    Piassa
+                </a>
+
+                <a href="#" class="city-card"
+                   onclick="filterArea('Mexico'); return false;">
+                    Mexico
+                </a>
+
+                <a href="#" class="city-card"
+                   onclick="filterArea('Gerji'); return false;">
+                    Gerji
+                </a>
+
+                <a href="#" class="city-card"
+                   onclick="filterArea('Jemo'); return false;">
+                    Jemo
+                </a>
+
+                <a href="#" class="city-card"
+                   onclick="filterArea('Kaliti'); return false;">
+                    Kaliti
+                </a>
+
+                <a href="#" class="city-card"
+                   onclick="filterArea('Kera'); return false;">
+                    Kera
+                </a>
+
+                <a href="#" class="city-card"
+                   onclick="filterArea('Lafto'); return false;">
+                    Lafto
+                </a>
+
+                <a href="#" class="city-card"
+                   onclick="filterArea('Gofa'); return false;">
+                    Gofa
+                </a>
+
+                <a href="#" class="city-card"
+                   onclick="filterArea('Ayat'); return false;">
+                    Ayat
+                </a>
+
+                <a href="#" class="city-card"
+                   onclick="filterArea('Summit'); return false;">
+                    Summit
+                </a>
+
+                <a href="#" class="city-card"
+                   onclick="filterArea('Shiromeda'); return false;">
+                    Shiromeda
+                </a>
+
+                <a href="#" class="city-card"
+                   onclick="filterArea('Shola'); return false;">
+                    Shola
+                </a>
+
+                <a href="#" class="city-card"
+                   onclick="filterArea('Yeka'); return false;">
+                    Yeka
+                </a>
+
+                <a href="#" class="city-card"
+                   onclick="filterArea('Kotebe'); return false;">
+                    Kotebe
+                </a>
+
+                <a href="#" class="city-card"
+                   onclick="filterArea('Makanisa'); return false;">
+                    Makanisa
+                </a>
+
+                <a href="#" class="city-card"
+                   onclick="filterArea('Lebu'); return false;">
+                    Lebu
+                </a>
+
+                <a href="#" class="city-card"
+                   onclick="filterArea('Akaki'); return false;">
+                    Akaki
+                </a>
+
+            </div>
+
+
+            <h3>Surrounding Areas</h3>
+
+            <div class="city-list">
+
+                <a href="#" class="city-card"
+                   onclick="filterArea('Burayu'); return false;">
+                    Burayu
+                </a>
+
+                <a href="#" class="city-card"
+                   onclick="filterArea('Sebeta'); return false;">
+                    Sebeta
+                </a>
+
+                <a href="#" class="city-card"
+                   onclick="filterArea('Sheger'); return false;">
+                    Sheger
+                </a>
+
+                <a href="#" class="city-card"
+                   onclick="filterArea('Koye'); return false;">
+                    Koye
+                </a>
+
+                <a href="#" class="city-card"
+                   onclick="filterArea('Tulu Dimtu'); return false;">
+                    Tulu Dimtu
+                </a>
+
+                <a href="#" class="city-card"
+                   onclick="filterArea('Sululta'); return false;">
+                    Sululta
+                </a>
+
+                <a href="#" class="city-card"
+                   onclick="filterArea('Gelan'); return false;">
+                    Gelan
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- AVAILABLE HOMES -->
+    <section class="latest-section">
+        <div class="section-title">
+            <h2>Available Homes</h2>
+            <span id="home-count" class="see-more"></span>
+        </div>
+        <div class="listing-list" id="home-list">
+            <div class="message-box">Loading approved homes...</div>
+        </div>
+    </section>
+
+    <!-- JAVASCRIPT -->
+    <script>
+        let selectedCategory = "";
+        let selectedCity = "";
+        let selectedArea = "";
+        let allHomes = [];
+
+        function escapeHtml(value) {
+            return String(value ?? "").replace(/[&<>'"]/g, function (c) {
+                return ({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;","\"":"&quot;"})[c];
+            });
+        }
+
+        function sameValue(a,b){ return String(a||"").trim().toLowerCase() === String(b||"").trim().toLowerCase(); }
+
+        function homeMainImage(home) {
+            if (Array.isArray(home.image_urls) && home.image_urls.length) return home.image_urls[0];
+            if (typeof home.image_urls === "string" && home.image_urls.trim()) {
+                try { const parsed=JSON.parse(home.image_urls); if(Array.isArray(parsed)&&parsed.length) return parsed[0]; } catch(e) {}
+            }
+            return "";
+        }
+
+        function renderHomes() {
+            const box=document.getElementById("home-list");
+            let homes=allHomes.slice();
+            if(selectedCategory) homes=homes.filter(h=>sameValue(h.category,selectedCategory) || sameValue(h.property_type,selectedCategory));
+            if(selectedCity) homes=homes.filter(h=>sameValue(h.city,selectedCity));
+            if(selectedArea) homes=homes.filter(h=>sameValue(h.area,selectedArea));
+
+            const count=document.getElementById("home-count");
+            if(count) count.textContent = `${homes.length} approved listing${homes.length===1?'':'s'}`;
+
+            if(!homes.length){
+                box.innerHTML='<div class="message-box"><h3>No homes found</h3><p>There are no approved property listings matching your selected filters yet.</p></div>';
+                return;
+            }
+
+            box.innerHTML=homes.map(home=>{
+                const img=homeMainImage(home);
+                const location=[home.area,home.city].filter(Boolean).join(', ') || 'Location not specified';
+                const category=home.category || home.property_type || 'Property';
+                return `<article class="listing-card home-card">
+                    <div class="home-card-image-wrap">
+                        ${img ? `<img class="home-card-image" src="${escapeHtml(img)}" alt="${escapeHtml(home.title||'Property')}" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'home-card-placeholder\'>🏠</div>'">` : '<div class="home-card-placeholder">🏠</div>'}
+                    </div>
+                    <div class="home-card-content">
+                        <h3>${escapeHtml(home.title||'Property for Rent')}</h3>
+                        <p>🏠 ${escapeHtml(category)}</p>
+                        <p>📍 ${escapeHtml(location)}</p>
+                        <p>💰 ${escapeHtml(home.price||'Price negotiable')}</p>
+                        <a href="details.html?id=${encodeURIComponent(home.id)}" class="view-details">View Details</a>
+                    </div>
+                </article>`;
+            }).join('');
+        }
+
+        function filterCategory(category){ selectedCategory=category; renderHomes(); }
+        function filterCity(city){
+            selectedCity=city; selectedArea="";
+            const addisAreas=document.getElementById("addis-areas");
+            if(addisAreas) addisAreas.style.display=city==="Addis Ababa"?"block":"none";
+            renderHomes();
+        }
+        function filterArea(area){ selectedCity="Addis Ababa"; selectedArea=area; renderHomes(); }
+        function showAllHomes(){ selectedCategory=""; selectedCity=""; selectedArea=""; const a=document.getElementById("addis-areas"); if(a)a.style.display="none"; renderHomes(); }
+
+        async function loadHomes(){
+            const box=document.getElementById("home-list");
+            try{
+                const {data,error}=await window.supabaseClient.from("listings").select("*").eq("listing_type","home").eq("status","approved").order("posted_at",{ascending:false});
+                if(error) throw error;
+                allHomes=data||[];
+                renderHomes();
+            }catch(error){
+                console.error("HOME LOAD ERROR:",error);
+                box.innerHTML='<div class="message-box error-box"><h3>Could not load homes</h3><p>'+escapeHtml(error.message||'Please try again.')+'</p></div>';
+            }
+        }
+    </script>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="supabase.js"></script>
+<script src="auth-ui.js"></script>
+<script>loadHomes();</script>
+</body>
+</html>

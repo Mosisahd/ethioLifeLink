@@ -1,0 +1,2583 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>EthioLifeLink - Add Listing</title>
+
+<link rel="stylesheet" href="css/style.css">
+
+<!-- Leaflet Map -->
+<link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+>
+
+<style>
+
+    .form-container {
+        max-width: 850px;
+        margin: 40px auto;
+        background: white;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    }
+
+    .form-container h2 {
+        color: #0066cc;
+        margin-top: 0;
+    }
+
+    .note {
+        background-color: #f0f7ff;
+        padding: 15px;
+        border-left: 4px solid #0066cc;
+        margin-bottom: 25px;
+        border-radius: 5px;
+    }
+
+    /* =========================
+       CHOOSE LISTING TYPE
+       ========================= */
+
+    .choice-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 25px;
+        margin-top: 30px;
+    }
+
+    .choice-card {
+        background-color: #f5f7fa;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        padding: 30px;
+        text-align: center;
+        transition: 0.2s;
+    }
+
+    .choice-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.10);
+    }
+
+    .choice-icon {
+        font-size: 50px;
+        margin-bottom: 15px;
+    }
+
+    .choice-card h3 {
+        color: #0066cc;
+        margin-top: 0;
+    }
+
+    .choice-card p {
+        color: #666;
+        line-height: 1.5;
+    }
+
+    .choice-button {
+        display: inline-block;
+        background-color: #0066cc;
+        color: white;
+        padding: 13px 22px;
+        border-radius: 6px;
+        text-decoration: none;
+        font-weight: bold;
+        border: none;
+        cursor: pointer;
+        font-size: 15px;
+    }
+
+    .choice-button:hover {
+        background-color: #004c99;
+    }
+
+    /* =========================
+       FORM
+       ========================= */
+
+    .listing-form {
+        display: none;
+    }
+
+    .back-button {
+        display: inline-block;
+        margin-bottom: 20px;
+        color: #0066cc;
+        text-decoration: none;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    .back-button:hover {
+        text-decoration: underline;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-group label {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 8px;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        box-sizing: border-box;
+        font-size: 15px;
+    }
+
+    .form-group textarea {
+        min-height: 120px;
+        resize: vertical;
+    }
+
+    .form-heading {
+        color: #0066cc;
+        border-bottom: 1px solid #ddd;
+        padding-bottom: 10px;
+        margin-top: 25px;
+    }
+
+    /* =========================
+       APPLICATION
+       ========================= */
+
+    .application-box {
+        background-color: #fafafa;
+        border: 1px solid #ddd;
+        padding: 20px;
+        border-radius: 8px;
+        margin-bottom: 25px;
+    }
+
+    .application-box h3 {
+        color: #0066cc;
+        margin-top: 0;
+    }
+
+    /* =========================
+       LOCATION
+       ========================= */
+
+    .location-section {
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        padding: 20px;
+        background-color: #fafafa;
+    }
+
+    .location-steps {
+        display: grid;
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+
+    .location-step {
+        background-color: white;
+        padding: 14px;
+        border-radius: 7px;
+        border: 1px solid #ddd;
+    }
+
+    .location-step strong {
+        color: #0066cc;
+    }
+
+    .search-box {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 12px;
+    }
+
+    .search-box input {
+        flex: 1;
+    }
+
+    .search-button {
+        background-color: #0066cc;
+        color: white;
+        border: none;
+        padding: 12px 20px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: bold;
+        white-space: nowrap;
+    }
+
+    .search-button:hover {
+        background-color: #004c99;
+    }
+
+    .manual-message {
+        background-color: #fff8e1;
+        padding: 12px;
+        border-radius: 6px;
+        margin-bottom: 15px;
+        line-height: 1.5;
+    }
+
+    #map,
+    #mapHome {
+        width: 100%;
+        height: 450px;
+        border-radius: 8px;
+        margin-top: 10px;
+    }
+
+    .map-status {
+        background-color: white;
+        border: 1px solid #ddd;
+        padding: 15px;
+        border-radius: 7px;
+        margin-top: 15px;
+        line-height: 1.5;
+    }
+
+    .confirm-button {
+        width: 100%;
+        background-color: #28a745;
+        color: white;
+        border: none;
+        padding: 15px;
+        border-radius: 7px;
+        font-size: 17px;
+        font-weight: bold;
+        cursor: pointer;
+        margin-top: 15px;
+    }
+
+    .confirm-button:hover {
+        background-color: #218838;
+    }
+
+    .confirmed-location {
+        display: none;
+        background-color: #e9f7ef;
+        border: 1px solid #b7dfc6;
+        padding: 15px;
+        border-radius: 7px;
+        margin-top: 15px;
+        color: #1e7e34;
+        font-weight: bold;
+    }
+
+    .submit-button {
+        width: 100%;
+        border: none;
+        cursor: pointer;
+        font-size: 16px;
+        margin-top: 20px;
+    }
+
+    /* =========================
+       MOBILE
+       ========================= */
+
+    @media (max-width: 700px) {
+
+        .choice-container {
+            grid-template-columns: 1fr;
+        }
+
+        .search-box {
+            flex-direction: column;
+        }
+
+        .search-button {
+            width: 100%;
+        }
+
+    }
+
+</style>
+
+    <link rel="icon" type="image/jpeg" href="images/site-icon.jpg">
+</head>
+
+<body>
+
+<!-- ========================= HEADER ========================= -->
+
+<header class="navbar">
+
+<div class="logo logo-with-icon">
+    <a href="index.html" class="logo-icon-link" aria-label="EthioLifeLink home"><img src="images/site-icon.jpg" alt="EthioLifeLink logo"></a>
+    <div><h1>EthioLifeLink</h1><span>Job Vacancy and Home for Rent</span></div>
+</div>
+
+<nav>
+
+    <a href="index.html">Home</a>
+    <a href="jobs.html">Jobs</a>
+    <a href="homes.html">Homes</a>
+    <a href="add-listing.html">Add Listing</a>
+    <a href="auth.html" id="auth-nav-link">Login / Sign Up</a>
+
+</nav>
+
+</header>
+
+<!-- ========================= MAIN ========================= -->
+
+<main>
+
+<div class="form-container">
+
+
+    <!-- =========================
+         CHOOSE LISTING TYPE
+         ========================= -->
+
+    <div id="choicePage">
+
+        <h2>
+            Add a Listing
+        </h2>
+
+        <p>
+            What would you like to post on EthioLifeLink?
+        </p>
+
+        <div class="note">
+
+            <strong>Important:</strong>
+
+            Your listing will be reviewed before it is published.
+
+        </div>
+
+
+        <div class="choice-container">
+
+
+            <!-- JOB -->
+
+            <div class="choice-card">
+
+                <div class="choice-icon">
+                    💼
+                </div>
+
+                <h3>
+                    Job Vacancy
+                </h3>
+
+                <p>
+                    Post a job opportunity and find
+                    qualified applicants.
+                </p>
+
+                <button
+                    type="button"
+                    class="choice-button"
+                    onclick="openJobForm()"
+                >
+                    Add Job Vacancy
+                </button>
+
+            </div>
+
+
+            <!-- HOME -->
+
+            <div class="choice-card">
+
+                <div class="choice-icon">
+                    🏠
+                </div>
+
+                <h3>
+                    Home for Rent
+                </h3>
+
+                <p>
+                    Post a home, commercial space,
+                    shop, office, restaurant, or other
+                    property for rent.
+                </p>
+
+                <button
+                    type="button"
+                    class="choice-button"
+                    onclick="openHomeForm()"
+                >
+                    Add Home for Rent
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ==================================================
+         JOB FORM
+         ================================================== -->
+
+    <div
+        id="jobForm"
+        class="listing-form"
+    >
+
+        <a
+            class="back-button"
+            onclick="backToChoices()"
+        >
+            ← Back to Listing Type
+        </a>
+
+        <h2>
+            💼 Add Job Vacancy
+        </h2>
+
+        <div class="note">
+
+            <strong>Job vacancy:</strong>
+
+            Provide clear information so job seekers
+            can understand the opportunity.
+
+        </div>
+
+
+        <form onsubmit="submitListing(event, 'job')">
+
+
+            <h3 class="form-heading">
+                Job Information
+            </h3>
+
+
+            <!-- JOB TITLE -->
+
+            <div class="form-group">
+
+                <label for="jobTitle">
+                    Job Title
+                </label>
+
+                <input
+    type="text"
+    id="jobTitle"
+    placeholder="Example: Accounting & Finance / Customer Service"
+    required
+>
+
+            </div>
+
+
+            <!-- DESCRIPTION -->
+
+            <div class="form-group">
+
+                <label for="jobDescription">
+                    Job Description
+                </label>
+
+                <textarea
+                    id="jobDescription"
+                    placeholder="Describe the job, responsibilities, and important information..."
+                    required
+                ></textarea>
+
+            </div>
+
+
+            <!-- JOB CATEGORY -->
+
+            <div class="form-group">
+
+                <label for="jobCategory">
+                    Job Category
+                </label>
+
+                <select
+                    id="jobCategory"
+                    required
+                >
+
+                    <option value="">
+                        Select job category
+                    </option>
+
+                    <option>Accounting & Finance / ሂሳብ እና ፋይናንስ</option>
+<option>Administration / አስተዳደር</option>
+<option>Customer Service / የደንበኛ አገልግሎት</option>
+<option>Data Entry / የዳታ ማስገቢያ</option>
+<option>Sales & Marketing / ሽያጭ እና ማርኬቲንግ</option>
+<option>Information Technology / ኢንፎርሜሽን ቴክኖሎጂ</option>
+<option>Engineering / ኢንጂነሪንግ</option>
+<option>Healthcare & Medical / ጤና እና ሕክምና</option>
+<option>Education & Teaching / ትምህርት እና አስተማሪ</option>
+<option>Construction / ግንባታ</option>
+<option>Human Resources / የሰው ሃብት</option>
+<option>Banking & Insurance / ባንክ እና ኢንሹራንስ</option>
+<option>Legal / ሕግ</option>
+<option>Hospitality & Tourism / ሆቴል እና ቱሪዝም</option>
+<option>Transportation & Logistics / ትራንስፖርት እና ሎጂስቲክስ</option>
+<option>Driving / ሹፌር</option>
+<option>Manufacturing / ማምረት</option>
+<option>Agriculture & Farming / ግብርና</option>
+<option>NGO & Development / ኤንጂኦ እና ልማት</option>
+<option>Security / ጥበቃ</option>
+<option>Retail & Shop / የሱቅ እና ችርቻሮ ስራ</option>
+<option>Mechanic & Automotive / መካኒክ እና አውቶሞቲቭ</option>
+<option>Electrician / ኤሌክትሪሺያን</option>
+<option>Plumber / የቧንቧ ስራ</option>
+<option>Welder / የብረት ብየዳ ስራ</option>
+<option>Carpenter / የአናጢ ስራ</option>
+<option>Mason & Construction Worker / ግንበኛ</option>
+<option>Cleaner & Housekeeping / የጽዳት እና የቤት አያያዝ</option>
+<option>Domestic Worker / የቤት ሰራተኛ</option>
+<option>Cook & Chef / ምግብ አብሳይ እና ሼፍ</option>
+<option>Waiter & Restaurant Staff / አስተናጋጅ እና የሬስቶራንት ሰራተኛ</option>
+<option>Beauty & Salon / የውበት እና ሳሎን ስራ</option>
+<option>Tailoring & Fashion / ስፌት እና ፋሽን</option>
+<option>Factory & Production / ፋብሪካ እና ምርት</option>
+<option>Warehouse & Storekeeper / መጋዘን እና የመጋዘን ሰራተኛ</option>
+<option>Procurement & Purchasing / ግዥ</option>
+<option>Research & Laboratory / ምርምር እና ላቦራቶሪ</option>
+<option>Pharmacy / ፋርማሲ</option>
+<option>Social Work / ማህበራዊ ስራ</option>
+<option>Real Estate / ሪል እስቴት</option>
+<option>Graphic Design / ግራፊክ ዲዛይን</option>
+<option>Photography & Video / ፎቶግራፍ እና ቪዲዮ</option>
+<option>Translation & Language / ትርጉም እና ቋንቋ</option>
+<option>Freelance & Remote Work / ፍሪላንስ እና የርቀት ስራ</option>
+<option>Other / ሌላ</option>
+
+                </select>
+
+            </div>
+
+
+            <!-- EMPLOYMENT TYPE -->
+
+            <div class="form-group">
+
+                <label for="employmentType">
+                    Employment Type
+                </label>
+
+                <select
+                    id="employmentType"
+                    required
+                >
+
+                    <option value="">
+                        Select employment type
+                    </option>
+
+                    <option>Full Time</option>
+                    <option>Part Time</option>
+                    <option>Contract</option>
+                    <option>Temporary</option>
+                    <option>Internship</option>
+
+                </select>
+
+            </div>
+
+
+            <!-- EDUCATION -->
+
+            <div class="form-group">
+
+                <label for="education">
+                    Education Requirement
+                </label>
+
+                <input
+                    type="text"
+                    id="education"
+                    placeholder="Example: Bachelor's degree in Accounting"
+                >
+
+            </div>
+
+
+            <!-- EXPERIENCE -->
+
+            <div class="form-group">
+
+                <label for="experience">
+                    Experience Requirement
+                </label>
+
+                <input
+                    type="text"
+                    id="experience"
+                    placeholder="Example: 1–2 years or Fresh Graduate"
+                >
+
+            </div>
+
+
+            <!-- SALARY -->
+
+            <div class="form-group">
+
+                <label for="jobSalary">
+                    Salary
+                </label>
+
+                <input
+                    type="text"
+                    id="jobSalary"
+                    placeholder="Example: 18,000 ETB / Month or Negotiable"
+                    required
+                >
+
+            </div>
+
+
+            <!-- APPLICATION METHOD -->
+
+            <div class="form-group application-box">
+                <h3>Application Method</h3>
+                <label for="applicationMethod">How should applicants apply?</label>
+                <select id="applicationMethod" required>
+                    <option value="">Select application method</option>
+                    <option value="Email">Email</option>
+                    <option value="Phone">Phone</option>
+                    <option value="WhatsApp">WhatsApp</option>
+                    <option value="Company Website">Company Website</option>
+                    <option value="In Person">In Person</option>
+                </select>
+                <small>Select the main way applicants should submit their application.</small>
+            </div>
+
+            <!-- COMPANY WEBSITE -->
+
+            <div class="form-group">
+                <label for="companyWebsite">Company Website (optional)</label>
+                <input
+                    type="url"
+                    id="companyWebsite"
+                    placeholder="https://www.example.com"
+                >
+                <small>Applicants can visit the company website for more information.</small>
+            </div>
+
+            <!-- JOB EXPIRY DATE -->
+
+            <div class="form-group">
+                <label for="jobExpireDate">Vacancy Expire Date</label>
+                <input
+                    type="date"
+                    id="jobExpireDate"
+                    autocomplete="off"
+                    required
+                >
+                <small>Choose the final date when this job vacancy will be available.</small>
+            </div>
+
+
+            <!-- CITY -->
+
+            <div class="form-group">
+
+                <label for="jobCity">
+                    City
+                </label>
+
+                <select
+                    id="jobCity"
+                    required
+                >
+
+                    <option value="">
+                        Select city
+                    </option>
+
+                    <option>Addis Ababa</option>
+                    <option>Adama</option>
+                    <option>Bishoftu</option>
+                    <option>Hawassa</option>
+                    <option>Bahir Dar</option>
+                    <option>Mekelle</option>
+                    <option>Gondar</option>
+                    <option>Dire Dawa</option>
+                    <option>Jimma</option>
+                    <option>Dessie</option>
+                    <option>Shashamane</option>
+                    <option>Arba Minch</option>
+                    <option>Wolaita Sodo</option>
+                    <option>Nekemte</option>
+                    <option>Debre Birhan</option>
+                    <option>Debre Markos</option>
+                    <option>Harar</option>
+                    <option>Axum</option>
+                    <option>Dilla</option>
+                    <option>Jijiga</option>
+                    <option>Debre Tabor</option>
+                    <option>Hosanna</option>
+                    <option>Woldiya</option>
+                    <option>Adigrat</option>
+                    <option>Butajira</option>
+                    <option>Ambo</option>
+                    <option>Bedele</option>
+                    <option>Assela</option>
+                    <option>Kombolcha</option>
+
+                </select>
+
+            </div>
+
+
+            <!-- AREA -->
+
+            <div class="form-group">
+
+                <label for="jobArea">
+                    Area / Neighborhood
+                </label>
+
+                <input
+                    type="text"
+                    id="jobArea"
+                    placeholder="Example: Bole"
+                    required
+                >
+
+            </div>
+
+
+            <!-- CONTACT -->
+
+            <div class="form-group">
+
+                <label for="jobPhone">
+                    Contact Phone
+                </label>
+
+                <input
+                    type="tel"
+                    id="jobPhone"
+                    placeholder="+251..."
+                    required
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="jobEmail">
+                    Contact Email
+                </label>
+
+                <input
+                    type="email"
+                    id="jobEmail"
+                    placeholder="example@gmail.com"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="jobWhatsapp">
+                    WhatsApp Number
+                </label>
+
+                <input
+                    type="tel"
+                    id="jobWhatsapp"
+                    placeholder="+251..."
+                >
+
+            </div>
+
+
+            <!-- JOB LOCATION -->
+
+            <div class="form-group">
+
+                <label>
+                    📍 Exact Location of Job
+                </label>
+
+                <div class="location-section">
+
+
+                    <div class="location-steps">
+
+                        <div class="location-step">
+
+                            <strong>
+                                Step 1: 🔍 Search your location
+                            </strong>
+
+                            <br>
+
+                            Search for a city, area, street,
+                            building, university, hospital,
+                            or other place.
+
+                        </div>
+
+
+                        <div class="location-step">
+
+                            <strong>
+                                Step 2: 📍 Find it on the map
+                            </strong>
+
+                            <br>
+
+                            The map will move to the searched location.
+
+                        </div>
+
+
+                        <div class="location-step">
+
+                            <strong>
+                                Step 3: 🔴 Select the exact building
+                            </strong>
+
+                            <br>
+
+                            Drag the red pin onto the exact building.
+
+                            <br><br>
+
+                            <strong>
+                                You can also move and zoom the map manually.
+                            </strong>
+
+                        </div>
+
+
+                        <div class="location-step">
+
+                            <strong>
+                                Step 4: ✅ Confirm Location
+                            </strong>
+
+                            <br>
+
+                            Confirm when the red pin is exactly
+                            where the job is located.
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="search-box">
+
+                        <input
+                            type="text"
+                            id="locationSearchJob"
+                            placeholder="Example: Tikur Anbessa Specialized Hospital, Addis Ababa"
+                        >
+
+                        <button
+                            type="button"
+                            class="search-button"
+                            onclick="searchLocation('Job')"
+                        >
+                            🔍 Find Location
+                        </button>
+
+                    </div>
+
+
+                    <div class="manual-message">
+
+                        💡
+
+                        <strong>Search is optional.</strong>
+
+                        If the exact building cannot be found,
+                        move and zoom the map manually and drag
+                        the 🔴 red pin onto the exact building.
+
+                    </div>
+
+
+                    <div id="map"></div>
+
+
+                    <div
+                        class="map-status"
+                        id="mapStatus"
+                    >
+
+                        🗺️
+
+                        <strong>Map ready.</strong>
+
+                        <br><br>
+
+                        Select the exact job location.
+
+                    </div>
+
+
+                    <button
+                        type="button"
+                        class="confirm-button"
+                        onclick="confirmLocation()"
+                    >
+                        ✅ Confirm Location
+                    </button>
+
+
+                    <div
+                        class="confirmed-location"
+                        id="confirmedLocation"
+                    >
+
+                        ✅ Exact location confirmed!
+
+                        <br><br>
+
+                        The selected map location will be saved
+                        with this job listing.
+
+                    </div>
+
+
+                    <!-- JOB LATITUDE -->
+
+                    <input
+                        type="hidden"
+                        id="latitudeInput"
+                        name="latitude"
+                    >
+
+                    <!-- JOB LONGITUDE -->
+
+                    <input
+                        type="hidden"
+                        id="longitudeInput"
+                        name="longitude"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="btn submit-button"
+            >
+                Submit Job for Review
+            </button>
+
+        </form>
+
+    </div>
+
+
+    <!-- ==================================================
+         HOME FORM
+         ================================================== -->
+
+    <div
+        id="homeForm"
+        class="listing-form"
+    >
+
+        <a
+            class="back-button"
+            onclick="backToChoices()"
+        >
+            ← Back to Listing Type
+        </a>
+
+
+        <h2>
+            🏠 Add Home for Rent
+        </h2>
+
+
+        <div class="note">
+
+            <strong>Property listing:</strong>
+
+            Provide clear information about the home,
+            commercial space, shop, office, restaurant,
+            or other property.
+
+        </div>
+
+
+        <form onsubmit="submitListing(event, 'home')">
+
+
+            <h3 class="form-heading">
+                Property Information
+            </h3>
+
+
+            <!-- PROPERTY TITLE -->
+
+            <div class="form-group">
+
+                <label for="homeTitle">
+                    Property Title
+                </label>
+
+                <input
+                    type="text"
+                    id="homeTitle"
+                    placeholder="Example: Commercial Space for Rent"
+                    required
+                >
+
+            </div>
+
+
+            <!-- DESCRIPTION -->
+
+            <div class="form-group">
+
+                <label for="homeDescription">
+                    Property Description
+                </label>
+
+                <textarea
+                    id="homeDescription"
+                    placeholder="Describe the property, rooms, condition, facilities, and other important details..."
+                    required
+                ></textarea>
+
+            </div>
+
+
+            <!-- PROPERTY TYPE -->
+
+            <div class="form-group">
+
+                <label for="propertyType">
+                    Property Type
+                </label>
+
+                <select
+                    id="propertyType"
+                    onchange="changePropertyType()"
+                    required
+                >
+
+                    <option value="">
+                        Select property type
+                    </option>
+
+                    <option value="Living">
+                        🏠 Home for Living
+                    </option>
+
+                    <option value="Commercial">
+                        🏬 Commercial Space for Rent
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- PROPERTY CATEGORY -->
+
+            <div
+                class="form-group"
+                id="categoryGroup"
+                style="display: none;"
+            >
+
+                <label for="propertyCategory">
+                    Category
+                </label>
+
+                <select id="propertyCategory">
+
+                    <option value="">
+                        Select category
+                    </option>
+
+                    <option value="Restaurant">
+                        🏠 Restaurant
+                    </option>
+
+                    <option value="Shop">
+                        🏪 Shop
+                    </option>
+
+                    <option value="Bank">
+                        🏦 Bank
+                    </option>
+
+                    <option value="Office">
+                        🏢 Office
+                    </option>
+
+                    <option value="Warehouse">
+                        🏭 Warehouse
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- BEDROOMS -->
+
+            <div
+                class="form-group"
+                id="bedroomGroup"
+            >
+
+                <label for="bedrooms">
+                    Number of Bedrooms
+                </label>
+
+                <select id="bedrooms">
+
+                    <option value="">
+                        Select number of bedrooms
+                    </option>
+
+                    <option>Studio</option>
+                    <option>1 Bedroom</option>
+                    <option>2 Bedrooms</option>
+                    <option>3 Bedrooms</option>
+                    <option>4 Bedrooms</option>
+                    <option>5+ Bedrooms</option>
+                    <option>Not Applicable</option>
+
+                </select>
+
+            </div>
+
+
+            <!-- CONDITION -->
+
+            <div class="form-group">
+
+                <label for="propertyCondition">
+                    Property Condition
+                </label>
+
+                <select id="propertyCondition">
+
+                    <option value="">
+                        Select condition
+                    </option>
+
+                    <option>New</option>
+                    <option>Good Condition</option>
+                    <option>Needs Renovation</option>
+
+                </select>
+
+            </div>
+
+
+            <!-- FURNISHED -->
+
+            <div
+                class="form-group"
+                id="furnishedGroup"
+            >
+
+                <label for="furnished">
+                    Furnished Status
+                </label>
+
+                <select id="furnished">
+
+                    <option value="">
+                        Select option
+                    </option>
+
+                    <option>Furnished</option>
+                    <option>Unfurnished</option>
+                    <option>Not Applicable</option>
+
+                </select>
+
+            </div>
+
+
+            <!-- PRICE -->
+
+            <div class="form-group">
+
+                <label for="homePrice">
+                    Rent Price
+                </label>
+
+                <input
+                    type="text"
+                    id="homePrice"
+                    placeholder="Example: 25,000 ETB / Month"
+                    required
+                >
+
+            </div>
+
+
+            <!-- CITY -->
+
+            <div class="form-group">
+
+                <label for="homeCity">
+                    City
+                </label>
+
+                <select
+                    id="homeCity"
+                    required
+                >
+
+                    <option value="">
+                        Select city
+                    </option>
+
+                    <option>Addis Ababa</option>
+                    <option>Adama</option>
+                    <option>Bishoftu</option>
+                    <option>Hawassa</option>
+                    <option>Bahir Dar</option>
+                    <option>Mekelle</option>
+                    <option>Gondar</option>
+                    <option>Dire Dawa</option>
+                    <option>Jimma</option>
+                    <option>Dessie</option>
+                    <option>Shashamane</option>
+                    <option>Arba Minch</option>
+                    <option>Wolaita Sodo</option>
+                    <option>Nekemte</option>
+                    <option>Debre Birhan</option>
+                    <option>Debre Markos</option>
+                    <option>Harar</option>
+                    <option>Axum</option>
+                    <option>Dilla</option>
+                    <option>Jijiga</option>
+                    <option>Debre Tabor</option>
+                    <option>Hosanna</option>
+                    <option>Woldiya</option>
+                    <option>Adigrat</option>
+                    <option>Butajira</option>
+                    <option>Ambo</option>
+                    <option>Bedele</option>
+                    <option>Assela</option>
+                    <option>Kombolcha</option>
+
+                </select>
+
+            </div>
+
+
+            <!-- AREA -->
+
+            <div class="form-group">
+
+                <label for="homeArea">
+                    Area / Neighborhood
+                </label>
+
+                <input
+                    type="text"
+                    id="homeArea"
+                    placeholder="Example: Bole"
+                    required
+                >
+
+            </div>
+
+
+            <!-- CONTACT -->
+
+            <div class="form-group">
+
+                <label for="homePhone">
+                    Contact Phone
+                </label>
+
+                <input
+                    type="tel"
+                    id="homePhone"
+                    placeholder="+251..."
+                    required
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="homeEmail">
+                    Contact Email
+                </label>
+
+                <input
+                    type="email"
+                    id="homeEmail"
+                    placeholder="example@gmail.com"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="homeWhatsapp">
+                    WhatsApp Number
+                </label>
+
+                <input
+                    type="tel"
+                    id="homeWhatsapp"
+                    placeholder="+251..."
+                >
+
+            </div>
+
+
+            <!-- PROPERTY IMAGES -->
+            <div class="form-group">
+                <label for="homeImages">Property Photos</label>
+                <div class="home-upload-box">
+                    <strong>📸 Add photos of the property</strong>
+                    <p style="margin:6px 0 12px;color:#667085;">You can select multiple clear photos. The first photo will be used as the main photo.</p>
+                    <input type="file" id="homeImages" accept="image/jpeg,image/png,image/webp" multiple>
+                    <div id="homeImagePreview" class="home-image-preview"></div>
+                </div>
+            </div>
+
+            <!-- HOME LOCATION -->
+
+            <div class="form-group">
+
+                <label>
+                    📍 Exact Location of Home / Property
+                </label>
+
+                <div class="location-section">
+
+
+                    <div class="location-steps">
+
+                        <div class="location-step">
+
+                            <strong>
+                                Step 1: 🔍 Search your location
+                            </strong>
+
+                            <br>
+
+                            Search for a city, area, street,
+                            building, or other place.
+
+                        </div>
+
+
+                        <div class="location-step">
+
+                            <strong>
+                                Step 2: 📍 Find it on the map
+                            </strong>
+
+                            <br>
+
+                            The map will move to the searched location.
+
+                        </div>
+
+
+                        <div class="location-step">
+
+                            <strong>
+                                Step 3: 🔴 Select the exact building
+                            </strong>
+
+                            <br>
+
+                            Drag the red pin onto the exact building
+                            or property.
+
+                            <br><br>
+
+                            <strong>
+                                You can also move and zoom the map manually.
+                            </strong>
+
+                        </div>
+
+
+                        <div class="location-step">
+
+                            <strong>
+                                Step 4: ✅ Confirm Location
+                            </strong>
+
+                            <br>
+
+                            Confirm when the red pin is exactly
+                            where the property is located.
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="search-box">
+
+                        <input
+                            type="text"
+                            id="locationSearchHome"
+                            placeholder="Example: Tikur Anbessa Specialized Hospital, Addis Ababa"
+                        >
+
+                        <button
+                            type="button"
+                            class="search-button"
+                            onclick="searchLocation('Home')"
+                        >
+                            🔍 Find Location
+                        </button>
+
+                    </div>
+
+
+                    <div class="manual-message">
+
+                        💡
+
+                        <strong>Search is optional.</strong>
+
+                        If the exact building cannot be found,
+                        move and zoom the map manually and drag
+                        the 🔴 red pin onto the exact building.
+
+                    </div>
+
+
+                    <div id="mapHome"></div>
+
+
+                    <div
+                        class="map-status"
+                        id="mapStatusHome"
+                    >
+
+                        🗺️
+
+                        <strong>Map ready.</strong>
+
+                        <br><br>
+
+                        Select the exact property location.
+
+                    </div>
+
+
+                    <button
+                        type="button"
+                        class="confirm-button"
+                        onclick="confirmHomeLocation()"
+                    >
+                        ✅ Confirm Location
+                    </button>
+
+
+                    <div
+                        class="confirmed-location"
+                        id="confirmedLocationHome"
+                    >
+
+                        ✅ Exact location confirmed!
+
+                        <br><br>
+
+                        The selected map location will be saved
+                        with this property listing.
+
+                    </div>
+
+
+                    <!-- HOME LATITUDE -->
+
+                    <input
+                        type="hidden"
+                        id="latitudeInputHome"
+                        name="latitudeHome"
+                    >
+
+                    <!-- HOME LONGITUDE -->
+
+                    <input
+                        type="hidden"
+                        id="longitudeInputHome"
+                        name="longitudeHome"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="btn submit-button"
+            >
+                Submit Home for Review
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+</main>
+
+<!-- SUPABASE -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script>
+<script src="auth-ui.js"></script>
+
+<!-- LEAFLET -->
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" ></script>
+
+<script>
+/* =========================================================
+   EthioLifeLink - ADD LISTING
+   Supabase submission + optional Leaflet location picker
+   ========================================================= */
+
+/* ---------- HELPERS ---------- */
+function valueOf(id) {
+    const el = document.getElementById(id);
+    return el ? el.value.trim() : "";
+}
+
+function setButtonBusy(button, text) {
+    if (!button) return;
+    if (!button.dataset.originalText) {
+        button.dataset.originalText = button.textContent;
+    }
+    button.disabled = true;
+    button.textContent = text;
+}
+
+function restoreButton(button) {
+    if (!button) return;
+    button.disabled = false;
+    button.textContent =
+        button.dataset.originalText || "Submit for Review";
+    delete button.dataset.originalText;
+}
+
+function resetJobLocation() {
+    const lat = document.getElementById("latitudeInput");
+    const lng = document.getElementById("longitudeInput");
+    const confirmed = document.getElementById("confirmedLocation");
+
+    if (lat) lat.value = "";
+    if (lng) lng.value = "";
+    if (confirmed) confirmed.style.display = "none";
+
+    if (jobMarker) {
+        jobMap.removeLayer(jobMarker);
+        jobMarker = null;
+    }
+
+    const status = document.getElementById("mapStatus");
+    if (status) {
+        status.innerHTML =
+            "🗺️ <strong>Map ready.</strong><br><br>" +
+            "Select the exact job location.";
+    }
+}
+
+function resetHomeLocation() {
+    const lat = document.getElementById("latitudeInputHome");
+    const lng = document.getElementById("longitudeInputHome");
+    const confirmed = document.getElementById("confirmedLocationHome");
+
+    if (lat) lat.value = "";
+    if (lng) lng.value = "";
+    if (confirmed) confirmed.style.display = "none";
+
+    if (homeMarker) {
+        homeMap.removeLayer(homeMarker);
+        homeMarker = null;
+    }
+
+    const status = document.getElementById("mapStatusHome");
+    if (status) {
+        status.innerHTML =
+            "🗺️ <strong>Map ready.</strong><br><br>" +
+            "Select the exact property location.";
+    }
+}
+
+/* ---------- PROPERTY TYPE ---------- */
+function changePropertyType() {
+    const propertyType = valueOf("propertyType");
+    const categoryGroup = document.getElementById("categoryGroup");
+    const bedroomGroup = document.getElementById("bedroomGroup");
+    const furnishedGroup = document.getElementById("furnishedGroup");
+    const category = document.getElementById("propertyCategory");
+
+    if (propertyType === "Commercial") {
+        categoryGroup.style.display = "block";
+        bedroomGroup.style.display = "none";
+        furnishedGroup.style.display = "none";
+        if (category) category.required = true;
+    } else if (propertyType === "Living") {
+        categoryGroup.style.display = "none";
+        bedroomGroup.style.display = "block";
+        furnishedGroup.style.display = "block";
+        if (category) category.required = false;
+    } else {
+        categoryGroup.style.display = "none";
+        bedroomGroup.style.display = "block";
+        furnishedGroup.style.display = "block";
+        if (category) category.required = false;
+    }
+}
+
+/* ---------- PAGE SWITCHING ---------- */
+function openJobForm() {
+    document.getElementById("choicePage").style.display = "none";
+    document.getElementById("homeForm").style.display = "none";
+    document.getElementById("jobForm").style.display = "block";
+
+    setTimeout(function () {
+        if (jobMap) jobMap.invalidateSize();
+    }, 150);
+}
+
+function openHomeForm() {
+    document.getElementById("choicePage").style.display = "none";
+    document.getElementById("jobForm").style.display = "none";
+    document.getElementById("homeForm").style.display = "block";
+
+    setTimeout(function () {
+        if (homeMap) homeMap.invalidateSize();
+    }, 150);
+}
+
+function backToChoices() {
+    document.getElementById("choicePage").style.display = "block";
+    document.getElementById("jobForm").style.display = "none";
+    document.getElementById("homeForm").style.display = "none";
+}
+
+/* ---------- JOB MAP ---------- */
+const jobMap = L.map("map").setView([9.1450, 40.4897], 6);
+
+const ethiopiaBounds = L.latLngBounds(
+    [3.4, 32.8],
+    [15.1, 48.0]
+);
+
+jobMap.setMaxBounds(ethiopiaBounds);
+
+L.tileLayer(
+    "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+    {
+        attribution: "&copy; OpenStreetMap contributors"
+    }
+).addTo(jobMap);
+
+let jobMarker = null;
+
+function createJobMarker(latitude, longitude) {
+    if (jobMarker === null) {
+        jobMarker = L.marker(
+            [latitude, longitude],
+            { draggable: true }
+        ).addTo(jobMap);
+
+        jobMarker.on("dragend", function () {
+            updateJobCoordinates();
+
+            document.getElementById(
+                "confirmedLocation"
+            ).style.display = "none";
+
+            document.getElementById(
+                "mapStatus"
+            ).innerHTML =
+                "🔴 <strong>Pin moved.</strong><br><br>" +
+                "Check that the pin is on the exact building.<br><br>" +
+                "Then click <strong>✅ Confirm Location</strong>.";
+        });
+    } else {
+        jobMarker.setLatLng([latitude, longitude]);
+    }
+
+    updateJobCoordinates();
+}
+
+function updateJobCoordinates() {
+    if (!jobMarker) return;
+
+    const position = jobMarker.getLatLng();
+
+    document.getElementById("latitudeInput").value =
+        position.lat;
+
+    document.getElementById("longitudeInput").value =
+        position.lng;
+}
+
+/* ---------- HOME MAP ---------- */
+const homeMap = L.map("mapHome").setView(
+    [9.1450, 40.4897],
+    6
+);
+
+homeMap.setMaxBounds(ethiopiaBounds);
+
+L.tileLayer(
+    "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+    {
+        attribution: "&copy; OpenStreetMap contributors"
+    }
+).addTo(homeMap);
+
+let homeMarker = null;
+
+function createHomeMarker(latitude, longitude) {
+    if (homeMarker === null) {
+        homeMarker = L.marker(
+            [latitude, longitude],
+            { draggable: true }
+        ).addTo(homeMap);
+
+        homeMarker.on("dragend", function () {
+            updateHomeCoordinates();
+
+            document.getElementById(
+                "confirmedLocationHome"
+            ).style.display = "none";
+
+            document.getElementById(
+                "mapStatusHome"
+            ).innerHTML =
+                "🔴 <strong>Pin moved.</strong><br><br>" +
+                "Check that the pin is on the exact property.<br><br>" +
+                "Then click <strong>✅ Confirm Location</strong>.";
+        });
+    } else {
+        homeMarker.setLatLng([latitude, longitude]);
+    }
+
+    updateHomeCoordinates();
+}
+
+function updateHomeCoordinates() {
+    if (!homeMarker) return;
+
+    const position = homeMarker.getLatLng();
+
+    document.getElementById("latitudeInputHome").value =
+        position.lat;
+
+    document.getElementById("longitudeInputHome").value =
+        position.lng;
+}
+
+/* ---------- SEARCH LOCATION ---------- */
+async function searchLocation(type) {
+    const input =
+        type === "Job"
+            ? document.getElementById("locationSearchJob")
+            : document.getElementById("locationSearchHome");
+
+    const searchText = input.value.trim();
+
+    if (!searchText) {
+        alert("Please enter a location to search.");
+        return;
+    }
+
+    try {
+        const searchURL =
+            "https://nominatim.openstreetmap.org/search?" +
+            "format=json&limit=1&countrycodes=et&q=" +
+            encodeURIComponent(searchText + ", Ethiopia");
+
+        const response = await fetch(searchURL);
+
+        if (!response.ok) {
+            throw new Error("Location search failed.");
+        }
+
+        const results = await response.json();
+
+        if (!results.length) {
+            const statusId =
+                type === "Job"
+                    ? "mapStatus"
+                    : "mapStatusHome";
+
+            document.getElementById(statusId).innerHTML =
+                "⚠️ <strong>We couldn't find that name.</strong><br><br>" +
+                "Move and zoom the map manually, then place the red pin.";
+
+            return;
+        }
+
+        const result = results[0];
+        const latitude = parseFloat(result.lat);
+        const longitude = parseFloat(result.lon);
+
+        if (type === "Job") {
+            jobMap.setView(
+                [latitude, longitude],
+                17
+            );
+
+            createJobMarker(
+                latitude,
+                longitude
+            );
+
+            document.getElementById(
+                "confirmedLocation"
+            ).style.display = "none";
+
+            document.getElementById(
+                "mapStatus"
+            ).innerHTML =
+                "📍 <strong>Location found!</strong><br><br>" +
+                result.display_name +
+                "<br><br>" +
+                "Drag the 🔴 red pin onto the exact building, " +
+                "then confirm it.";
+
+        } else {
+            homeMap.setView(
+                [latitude, longitude],
+                17
+            );
+
+            createHomeMarker(
+                latitude,
+                longitude
+            );
+
+            document.getElementById(
+                "confirmedLocationHome"
+            ).style.display = "none";
+
+            document.getElementById(
+                "mapStatusHome"
+            ).innerHTML =
+                "📍 <strong>Location found!</strong><br><br>" +
+                result.display_name +
+                "<br><br>" +
+                "Drag the 🔴 red pin onto the exact property, " +
+                "then confirm it.";
+        }
+
+    } catch (error) {
+        console.error("LOCATION SEARCH ERROR:", error);
+
+        alert(
+            "Location search is unavailable right now. " +
+            "You can still select the location manually on the map."
+        );
+    }
+}
+
+/* ---------- MAP CLICKS ---------- */
+jobMap.on("click", function (event) {
+    createJobMarker(
+        event.latlng.lat,
+        event.latlng.lng
+    );
+
+    document.getElementById(
+        "confirmedLocation"
+    ).style.display = "none";
+
+    document.getElementById(
+        "mapStatus"
+    ).innerHTML =
+        "🔴 <strong>Location selected.</strong><br><br>" +
+        "Drag the red pin onto the exact building.<br><br>" +
+        "Then click <strong>✅ Confirm Location</strong>.";
+});
+
+homeMap.on("click", function (event) {
+    createHomeMarker(
+        event.latlng.lat,
+        event.latlng.lng
+    );
+
+    document.getElementById(
+        "confirmedLocationHome"
+    ).style.display = "none";
+
+    document.getElementById(
+        "mapStatusHome"
+    ).innerHTML =
+        "🔴 <strong>Location selected.</strong><br><br>" +
+        "Drag the red pin onto the exact property.<br><br>" +
+        "Then click <strong>✅ Confirm Location</strong>.";
+});
+
+/* ---------- CONFIRM LOCATION ---------- */
+function confirmLocation() {
+    if (!jobMarker) {
+        alert(
+            "Please select the exact job location on the map first."
+        );
+        return;
+    }
+
+    updateJobCoordinates();
+
+    document.getElementById(
+        "confirmedLocation"
+    ).style.display = "block";
+
+    document.getElementById(
+        "mapStatus"
+    ).innerHTML =
+        "✅ <strong>Exact job location confirmed!</strong><br><br>" +
+        "The red pin is now the selected location.";
+}
+
+function confirmHomeLocation() {
+    if (!homeMarker) {
+        alert(
+            "Please select the exact property location on the map first."
+        );
+        return;
+    }
+
+    updateHomeCoordinates();
+
+    document.getElementById(
+        "confirmedLocationHome"
+    ).style.display = "block";
+
+    document.getElementById(
+        "mapStatusHome"
+    ).innerHTML =
+        "✅ <strong>Exact property location confirmed!</strong><br><br>" +
+        "The red pin is now the selected location.";
+}
+
+/* =========================================================
+   HOME PROPERTY IMAGE UPLOAD
+   ========================================================= */
+const PROPERTY_IMAGE_BUCKET = "property-images";
+
+function setupHomeImagePreview() {
+    const input = document.getElementById("homeImages");
+    const preview = document.getElementById("homeImagePreview");
+    if (!input || !preview) return;
+    input.addEventListener("change", function () {
+        preview.innerHTML = "";
+        Array.from(input.files || []).forEach(function (file, index) {
+            if (!file.type.startsWith("image/")) return;
+            const reader = new FileReader();
+            reader.onload = function (event) {
+                const item = document.createElement("div");
+                item.className = "home-image-preview-item";
+                item.innerHTML = `<img src="${event.target.result}" alt="Property photo ${index + 1}"><span>Photo ${index + 1}</span>`;
+                preview.appendChild(item);
+            };
+            reader.readAsDataURL(file);
+        });
+    });
+}
+
+async function uploadHomeImages(session) {
+    const input = document.getElementById("homeImages");
+    const files = Array.from((input && input.files) || []);
+    if (!files.length) return [];
+    if (files.length > 8) {
+        throw new Error("Please select no more than 8 property photos.");
+    }
+    if (!session || !session.user) throw new Error("LOGIN_REQUIRED");
+
+    const urls = [];
+    for (const file of files) {
+        if (!file.type.startsWith("image/")) {
+            throw new Error("Only image files can be uploaded for a property.");
+        }
+        if (file.size > 8 * 1024 * 1024) {
+            throw new Error(`The image "${file.name}" is larger than 8 MB. Please choose a smaller image.`);
+        }
+        const ext = (file.name.split(".").pop() || "jpg").toLowerCase().replace(/[^a-z0-9]/g, "") || "jpg";
+        const path = `${session.user.id}/${crypto.randomUUID()}.${ext}`;
+        const uploadResult = await window.supabaseClient.storage
+            .from(PROPERTY_IMAGE_BUCKET)
+            .upload(path, file, { cacheControl: "3600", upsert: false, contentType: file.type });
+        if (uploadResult.error) {
+            // Property photos are optional. If storage is unavailable or its
+            // policy is not configured, continue with the property submission.
+            console.warn("Property photo upload was skipped:", uploadResult.error.message || uploadResult.error);
+            return [];
+        }
+        const publicResult = window.supabaseClient.storage
+            .from(PROPERTY_IMAGE_BUCKET)
+            .getPublicUrl(path);
+        urls.push(publicResult.data.publicUrl);
+    }
+    return urls;
+}
+
+/* =========================================================
+   SUPABASE SAVE
+   ========================================================= */
+async function saveListing(listing) {
+    if (!window.supabaseClient) {
+        throw new Error("Supabase is not connected. Please check supabase.js.");
+    }
+
+    async function ensureFreshSession() {
+        const current = await window.supabaseClient.auth.getSession();
+        if (current.error) throw current.error;
+        let session = current.data && current.data.session;
+        if (!session) throw new Error("LOGIN_REQUIRED");
+        if (session.expires_at && session.expires_at * 1000 - Date.now() < 60000) {
+            const refreshed = await window.supabaseClient.auth.refreshSession();
+            if (refreshed.error || !refreshed.data.session) throw (refreshed.error || new Error("LOGIN_REQUIRED"));
+            session = refreshed.data.session;
+        }
+        return session;
+    }
+
+    await ensureFreshSession();
+
+    console.log("📤 Inserting listing into Supabase:", listing);
+    let result = await window.supabaseClient.from("listings").insert([listing]);
+
+    // If an old access token expired between the session check and the request,
+    // refresh once and retry the insert instead of showing "JWT expired".
+    if (result.error && /jwt expired|invalid jwt|expired/i.test(result.error.message || "")) {
+        console.warn("Access token expired; refreshing session and retrying listing submission.");
+        const refreshed = await window.supabaseClient.auth.refreshSession();
+        if (refreshed.error || !refreshed.data || !refreshed.data.session) {
+            throw new Error("Your login session has expired. Please log in again and submit the listing.");
+        }
+        result = await window.supabaseClient.from("listings").insert([listing]);
+    }
+
+    // Some existing EthioLifeLink databases do not have submitted_by yet.
+    // If an older page/object accidentally includes it, retry without that field.
+    if (result.error && /submitted_by.*column.*listings|column.*submitted_by.*schema cache/i.test(result.error.message || "")) {
+        const retryListing = { ...listing };
+        delete retryListing.submitted_by;
+        console.warn("submitted_by is not present in the current listings schema; retrying without it.");
+        result = await window.supabaseClient.from("listings").insert([retryListing]);
+    }
+
+    if (result.error && /image_urls.*column.*listings|column.*image_urls.*schema cache/i.test(result.error.message || "")) {
+        const retryListing = { ...listing };
+        delete retryListing.image_urls;
+        console.warn("image_urls is not present in the current listings schema; retrying without property photos.");
+        result = await window.supabaseClient.from("listings").insert([retryListing]);
+    }
+
+    // The vacancy expiry feature requires expire_at to exist in public.listings.
+    // Do NOT silently remove this field, because that would make the expiry date disappear.
+    if (result.error && /expire_at.*column.*listings|column.*expire_at.*schema cache/i.test(result.error.message || "")) {
+        throw new Error(
+            "The vacancy expiry field is missing from Supabase. " +
+            "Run the supplied fix_expire_at.sql in Supabase SQL Editor, then try again."
+        );
+    }
+
+    if (result.error) {
+        console.error("❌ SUPABASE INSERT ERROR:", result.error);
+        if (/jwt expired|invalid jwt|refresh token/i.test(result.error.message || "")) {
+            throw new Error("Your login session has expired. Please log in again and submit the listing.");
+        }
+        throw result.error;
+    }
+
+    console.log("✅ SUPABASE INSERT SUCCESS");
+    return true;
+}
+
+/* =========================================================
+   SUBMIT
+   ========================================================= */
+async function submitListing(event, type) {
+
+    event.preventDefault();
+
+    const form = event.target;
+    const button = event.submitter;
+
+    let authSessionResult = await window.supabaseClient.auth.getSession();
+    let authSession = authSessionResult.data && authSessionResult.data.session;
+    if (authSession && authSession.expires_at && authSession.expires_at * 1000 - Date.now() < 60000) {
+        const refreshed = await window.supabaseClient.auth.refreshSession();
+        if (!refreshed.error) authSession = refreshed.data.session;
+    }
+    if (!authSession) {
+        alert("Please log in to EthioLifeLink before submitting a listing.");
+        location.href = "auth.html?return=add-listing.html";
+        return;
+    }
+
+    /* =====================================================
+       JOB
+       ===================================================== */
+    if (type === "job") {
+
+        const latitude =
+            parseFloat(valueOf("latitudeInput"));
+
+        const longitude =
+            parseFloat(valueOf("longitudeInput"));
+
+        const confirmed =
+            document.getElementById(
+                "confirmedLocation"
+            );
+
+        if (!Number.isFinite(latitude) ||
+            !Number.isFinite(longitude)) {
+
+            alert(
+                "Please select the exact job location on the map."
+            );
+
+            return;
+        }
+
+        if (!confirmed ||
+            confirmed.style.display !== "block") {
+
+            alert(
+                "Please click 'Confirm Location' before submitting."
+            );
+
+            return;
+        }
+
+        const title = valueOf("jobTitle");
+        const description = valueOf("jobDescription");
+        const category = valueOf("jobCategory");
+        const employmentType = valueOf("employmentType");
+        const education = valueOf("education");
+        const experience = valueOf("experience");
+        const salary = valueOf("jobSalary");
+        const companyWebsite = valueOf("companyWebsite");
+        const applicationMethod = valueOf("applicationMethod");
+        const jobExpireDate = valueOf("jobExpireDate");
+        const city = valueOf("jobCity");
+        const area = valueOf("jobArea");
+        const phone = valueOf("jobPhone");
+        const email = valueOf("jobEmail");
+        const whatsapp = valueOf("jobWhatsapp");
+
+        if (!title ||
+            !description ||
+            !category ||
+            !employmentType ||
+            !applicationMethod ||
+            !jobExpireDate ||
+            !city ||
+            !area ||
+            !phone) {
+
+            alert(
+                "Please complete all required job fields."
+            );
+
+            return;
+        }
+
+        /*
+         * IMPORTANT:
+         * These column names match the listings structure
+         * already used by your post.html and admin.html.
+         */
+        const listing = {
+
+            listing_type: "job",
+
+            submitted_by: authSession.user.id,
+
+            title: title,
+
+            category:
+                category || null,
+
+            property_type: null,
+
+            city:
+                city || null,
+
+            area:
+                area || null,
+
+            description:
+                description || null,
+
+            price: null,
+
+            salary:
+                salary || null,
+
+            employment_type:
+                employmentType || null,
+
+            education:
+                education || null,
+
+            experience:
+                experience || null,
+
+            bedrooms: null,
+
+            furnished: null,
+
+            company_website:
+                companyWebsite || null,
+
+            // Keep the exact date selected by the user.
+            // Save the user-selected vacancy expiry date in the actual listings column: expire_at.
+            expire_at:
+                jobExpireDate || null,
+
+            email:
+                email || null,
+
+            phone:
+                phone || null,
+
+            whatsapp:
+                whatsapp || null,
+
+            application_methods:
+                applicationMethod ? [applicationMethod] : null,
+
+            latitude:
+                latitude,
+
+            longitude:
+                longitude,
+
+            status:
+                "pending",
+
+            posted_at:
+                new Date().toISOString()
+        };
+
+        setButtonBusy(
+            button,
+            "⏳ Please wait..."
+        );
+
+        try {
+
+            await saveListing(listing);
+
+            alert(
+                "✅ Job submitted successfully!\n\n" +
+                "Your job vacancy has been sent to the " +
+                "Admin Dashboard for approval.\n\n" +
+                "Status: Pending review"
+            );
+
+            form.reset();
+
+            resetJobLocation();
+
+            backToChoices();
+
+        } catch (error) {
+
+            if (error.message === "LOGIN_REQUIRED" || /session has expired|JWT expired|refresh token/i.test(error.message || "")) {
+                alert("Your EthioLifeLink login session has expired. Please log in again.");
+                location.href = "auth.html?return=add-listing.html";
+                return;
+            }
+            alert(
+                "❌ Job submission failed.\n\n" +
+                (error.message || "Unknown Supabase error.") +
+                "\n\nThe job was NOT submitted."
+            );
+
+        } finally {
+
+            restoreButton(button);
+        }
+
+        return;
+    }
+
+    /* =====================================================
+       HOME / PROPERTY
+       ===================================================== */
+    if (type === "home") {
+
+        const latitude =
+            parseFloat(valueOf("latitudeInputHome"));
+
+        const longitude =
+            parseFloat(valueOf("longitudeInputHome"));
+
+        const confirmed =
+            document.getElementById(
+                "confirmedLocationHome"
+            );
+
+        if (!Number.isFinite(latitude) ||
+            !Number.isFinite(longitude)) {
+
+            alert(
+                "Please select the exact property location on the map."
+            );
+
+            return;
+        }
+
+        if (!confirmed ||
+            confirmed.style.display !== "block") {
+
+            alert(
+                "Please click 'Confirm Location' before submitting."
+            );
+
+            return;
+        }
+
+        const title = valueOf("homeTitle");
+        const description = valueOf("homeDescription");
+        const propertyType = valueOf("propertyType");
+        const category = valueOf("propertyCategory");
+        const bedrooms = valueOf("bedrooms");
+        const furnished = valueOf("furnished");
+        const priceText = valueOf("homePrice");
+        const city = valueOf("homeCity");
+        const area = valueOf("homeArea");
+        const phone = valueOf("homePhone");
+        const email = valueOf("homeEmail");
+        const whatsapp = valueOf("homeWhatsapp");
+
+        if (!title ||
+            !description ||
+            !propertyType ||
+            !priceText ||
+            !city ||
+            !area ||
+            !phone) {
+
+            alert(
+                "Please complete all required property fields."
+            );
+
+            return;
+        }
+
+        if (propertyType === "Commercial" &&
+            !category) {
+
+            alert(
+                "Please select the property category."
+            );
+
+            return;
+        }
+
+        /*
+         * Keep the rent value as entered because your existing
+         * project displays price as text and your existing
+         * submission structure uses price directly.
+         */
+        const listing = {
+
+            listing_type: "home",
+
+            submitted_by: authSession.user.id,
+
+            title:
+                title,
+
+            category:
+                category || null,
+
+            property_type:
+                propertyType || null,
+
+            city:
+                city || null,
+
+            area:
+                area || null,
+
+            description:
+                description || null,
+
+            price:
+                priceText || null,
+
+            salary: null,
+
+            employment_type: null,
+
+            education: null,
+
+            experience: null,
+
+            bedrooms:
+                bedrooms || null,
+
+            furnished:
+                furnished || null,
+
+            company_website: null,
+
+            email:
+                email || null,
+
+            phone:
+                phone || null,
+
+            whatsapp:
+                whatsapp || null,
+
+            application_methods: null,
+
+            latitude:
+                latitude,
+
+            longitude:
+                longitude,
+
+            status:
+                "pending",
+
+            posted_at:
+                new Date().toISOString()
+        };
+
+        setButtonBusy(
+            button,
+            "⏳ Uploading photos..."
+        );
+
+        try {
+
+            const propertyImageUrls = await uploadHomeImages(authSession);
+            if (propertyImageUrls.length) {
+                listing.image_urls = propertyImageUrls;
+            }
+
+            setButtonBusy(button, "⏳ Submitting...");
+            await saveListing(listing);
+
+            alert(
+                "✅ Home submitted successfully!\n\n" +
+                "Your property has been sent to the " +
+                "Admin Dashboard for approval.\n\n" +
+                "Status: Pending review"
+            );
+
+            form.reset();
+            const homePreview = document.getElementById("homeImagePreview");
+            if (homePreview) homePreview.innerHTML = "";
+
+            resetHomeLocation();
+
+            changePropertyType();
+
+            backToChoices();
+
+        } catch (error) {
+
+            if (error.message === "LOGIN_REQUIRED" || /session has expired|JWT expired|refresh token/i.test(error.message || "")) {
+                alert("Your EthioLifeLink login session has expired. Please log in again.");
+                location.href = "auth.html?return=add-listing.html";
+                return;
+            }
+            alert(
+                "❌ Property submission failed.\n\n" +
+                (error.message || "Unknown Supabase error.") +
+                "\n\nThe property was NOT submitted."
+            );
+
+        } finally {
+
+            restoreButton(button);
+        }
+
+        return;
+    }
+}
+
+/* ---------- STARTUP CHECK ---------- */
+document.addEventListener("DOMContentLoaded", async function () {
+    // Vacancy expiry date: do not pre-fill or reuse an old browser-restored date.
+    // The user must choose the actual vacancy expiry date.
+    const expiryInput = document.getElementById("jobExpireDate");
+    if (expiryInput) {
+        const now = new Date();
+        const localToday = [
+            now.getFullYear(),
+            String(now.getMonth() + 1).padStart(2, "0"),
+            String(now.getDate()).padStart(2, "0")
+        ].join("-");
+        expiryInput.min = localToday;
+        expiryInput.value = "";
+    }
+
+    if (!window.supabaseClient) {
+        console.error("❌ Supabase client was not created.");
+        return;
+    }
+    try {
+        let result = await window.supabaseClient.auth.getSession();
+        let session = result.data && result.data.session;
+        if (session && session.expires_at && session.expires_at * 1000 - Date.now() < 60000) {
+            const refreshed = await window.supabaseClient.auth.refreshSession();
+            if (!refreshed.error) session = refreshed.data.session;
+        }
+        if (!session) {
+            const here = location.pathname.split('/').pop() || 'add-listing.html';
+            location.href = 'auth.html?return=' + encodeURIComponent(here);
+            return;
+        }
+        console.log("✅ Add Listing: authenticated session ready.");
+        changePropertyType();
+    } catch (e) {
+        console.error("Session check failed:", e);
+        location.href = 'auth.html?return=add-listing.html';
+    }
+});
+</script>
+<script>setupHomeImagePreview();</script>
+
+</body>
+
+</html>

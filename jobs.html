@@ -1,0 +1,972 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>EthioLifeLink - Job Vacancy and Home for Rent</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        .jobs-page {
+            padding: 40px;
+        }
+
+        .jobs-header {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .jobs-header h2 {
+            margin-bottom: 10px;
+            font-size: 32px;
+        }
+
+        .jobs-header p {
+            color: #666;
+        }
+
+        .city-section {
+            margin-bottom: 40px;
+        }
+
+        .city-section h2 {
+            margin-bottom: 20px;
+        }
+
+        .city-list {
+            display: flex;
+            gap: 15px;
+            overflow-x: auto;
+            padding: 10px 5px 15px;
+            white-space: nowrap;
+        }
+
+        .city-card {
+            flex: 0 0 auto;
+            cursor: pointer;
+            border: none;
+            font-size: 15px;
+        }
+
+        .addis-areas {
+            display: none;
+            margin-top: 25px;
+            padding: 25px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .addis-areas h3 {
+            margin-top: 0;
+            color: #0066cc;
+        }
+
+        .area-group {
+            margin-bottom: 25px;
+        }
+
+        .area-group h4 {
+            margin-bottom: 12px;
+        }
+
+        .area-list {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding-bottom: 10px;
+            white-space: nowrap;
+        }
+
+        .area-card {
+            flex: 0 0 auto;
+            padding: 10px 16px;
+            background: #f5f7fa;
+            border-radius: 6px;
+            cursor: pointer;
+            border: 1px solid #ddd;
+            font-weight: bold;
+        }
+
+        .area-card:hover {
+            background: #0066cc;
+            color: white;
+        }
+
+        .selected-filter {
+            margin: 25px 0;
+            padding: 15px 20px;
+            background: #eaf3ff;
+            border-left: 4px solid #0066cc;
+            border-radius: 5px;
+            display: none;
+        }
+
+        .jobs-results {
+            padding: 20px 0 50px;
+        }
+
+        .listing-list {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        .listing-card {
+            background-color: #f5f7fa;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .listing-card h3 {
+            margin-top: 0;
+            color: #0066cc;
+            margin-bottom: 15px;
+        }
+
+        .listing-card p {
+            color: #666;
+            margin: 8px 0;
+        }
+
+        .view-details {
+            display: inline-block;
+            margin-top: 12px;
+            background-color: #0066cc;
+            color: white;
+            padding: 10px 18px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .view-details:hover {
+            background-color: #004c99;
+        }
+
+        .message-box {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            text-align: center;
+            color: #666;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+
+        .error-box {
+            color: #b00020;
+            border-left: 4px solid #b00020;
+        }
+
+        @media (max-width: 1000px) {
+            .listing-list {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .jobs-page {
+                padding: 25px 15px;
+            }
+
+            .listing-list {
+                grid-template-columns: 1fr;
+            }
+
+            .navbar {
+                padding: 15px 20px;
+            }
+
+            nav a {
+                margin-left: 10px;
+            }
+        }
+    </style>
+    <link rel="icon" type="image/jpeg" href="images/site-icon.jpg">
+</head>
+
+<body>
+
+<header class="navbar">
+
+    <div class="logo logo-with-icon">
+        <a href="index.html" class="logo-icon-link" aria-label="EthioLifeLink home"><img src="images/site-icon.jpg" alt="EthioLifeLink logo"></a>
+        <div><h1>EthioLifeLink</h1><span>Job Vacancy and Home for Rent</span></div>
+    </div>
+
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="jobs.html">Jobs</a>
+        <a href="homes.html">Homes</a>
+        <a href="add-listing.html">Add Listing</a>
+    <a href="auth.html" id="auth-nav-link">Log in</a>
+    </nav>
+
+</header>
+
+
+<main class="jobs-page">
+
+    <div class="jobs-header">
+        <span class="page-kicker">💼 EthioLifeLink Jobs</span>
+        <h2>Find Your Next Job in Ethiopia</h2>
+        <p>Browse approved job opportunities by city, area, and category.</p>
+    </div>
+
+
+    <!-- CITY FILTER -->
+
+    <section class="city-section">
+
+        <h2>Explore Jobs by City</h2>
+
+        <div class="city-list">
+
+            <button class="city-card" onclick="filterCity('Addis Ababa')">
+                Addis Ababa
+            </button>
+
+            <button class="city-card" onclick="filterCity('Adama')">
+                Adama
+            </button>
+
+            <button class="city-card" onclick="filterCity('Bishoftu')">
+                Bishoftu
+            </button>
+
+            <button class="city-card" onclick="filterCity('Hawassa')">
+                Hawassa
+            </button>
+
+            <button class="city-card" onclick="filterCity('Bahir Dar')">
+                Bahir Dar
+            </button>
+
+            <button class="city-card" onclick="filterCity('Mekelle')">
+                Mekelle
+            </button>
+
+            <button class="city-card" onclick="filterCity('Gondar')">
+                Gondar
+            </button>
+
+            <button class="city-card" onclick="filterCity('Dire Dawa')">
+                Dire Dawa
+            </button>
+
+            <button class="city-card" onclick="filterCity('Jimma')">
+                Jimma
+            </button>
+
+            <button class="city-card" onclick="filterCity('Dessie')">
+                Dessie
+            </button>
+
+            <button class="city-card" onclick="filterCity('Shashamane')">
+                Shashamane
+            </button>
+
+            <button class="city-card" onclick="filterCity('Arba Minch')">
+                Arba Minch
+            </button>
+
+            <button class="city-card" onclick="filterCity('Wolaita Sodo')">
+                Wolaita Sodo
+            </button>
+
+            <button class="city-card" onclick="filterCity('Nekemte')">
+                Nekemte
+            </button>
+
+            <button class="city-card" onclick="filterCity('Debre Birhan')">
+                Debre Birhan
+            </button>
+
+            <button class="city-card" onclick="filterCity('Debre Markos')">
+                Debre Markos
+            </button>
+
+            <button class="city-card" onclick="filterCity('Harar')">
+                Harar
+            </button>
+
+            <button class="city-card" onclick="filterCity('Axum')">
+                Axum
+            </button>
+
+            <button class="city-card" onclick="filterCity('Dilla')">
+                Dilla
+            </button>
+
+            <button class="city-card" onclick="filterCity('Jijiga')">
+                Jijiga
+            </button>
+
+            <button class="city-card" onclick="filterCity('Debre Tabor')">
+                Debre Tabor
+            </button>
+
+            <button class="city-card" onclick="filterCity('Hosanna')">
+                Hosanna
+            </button>
+
+            <button class="city-card" onclick="filterCity('Woldiya')">
+                Woldiya
+            </button>
+
+            <button class="city-card" onclick="filterCity('Adigrat')">
+                Adigrat
+            </button>
+
+            <button class="city-card" onclick="filterCity('Butajira')">
+                Butajira
+            </button>
+
+            <button class="city-card" onclick="filterCity('Ambo')">
+                Ambo
+            </button>
+
+            <button class="city-card" onclick="filterCity('Bedele')">
+                Bedele
+            </button>
+
+            <button class="city-card" onclick="filterCity('Assela')">
+                Assela
+            </button>
+
+            <button class="city-card" onclick="filterCity('Kombolcha')">
+                Kombolcha
+            </button>
+
+        </div>
+
+
+        <!-- ADDIS AREAS -->
+
+        <div id="addisAreas" class="addis-areas">
+
+            <h3>📍 Addis Ababa & Surrounding Areas</h3>
+
+            <div class="area-group">
+
+                <h4>Within Addis Ababa</h4>
+
+                <div class="area-list">
+
+                    <button class="area-card" onclick="filterArea('Bole')">Bole</button>
+                    <button class="area-card" onclick="filterArea('Kazanchis')">Kazanchis</button>
+                    <button class="area-card" onclick="filterArea('Saris')">Saris</button>
+                    <button class="area-card" onclick="filterArea('Megenagna')">Megenagna</button>
+                    <button class="area-card" onclick="filterArea('CMC')">CMC</button>
+                    <button class="area-card" onclick="filterArea('Piassa')">Piassa</button>
+                    <button class="area-card" onclick="filterArea('Mexico')">Mexico</button>
+                    <button class="area-card" onclick="filterArea('Gerji')">Gerji</button>
+                    <button class="area-card" onclick="filterArea('Jemo')">Jemo</button>
+                    <button class="area-card" onclick="filterArea('Kaliti')">Kaliti</button>
+                    <button class="area-card" onclick="filterArea('Kera')">Kera</button>
+                    <button class="area-card" onclick="filterArea('Lafto')">Lafto</button>
+                    <button class="area-card" onclick="filterArea('Gofa')">Gofa</button>
+                    <button class="area-card" onclick="filterArea('Ayat')">Ayat</button>
+                    <button class="area-card" onclick="filterArea('Summit')">Summit</button>
+                    <button class="area-card" onclick="filterArea('Shiromeda')">Shiromeda</button>
+                    <button class="area-card" onclick="filterArea('Shola')">Shola</button>
+                    <button class="area-card" onclick="filterArea('Yeka')">Yeka</button>
+                    <button class="area-card" onclick="filterArea('Kotebe')">Kotebe</button>
+                    <button class="area-card" onclick="filterArea('Makanisa')">Makanisa</button>
+                    <button class="area-card" onclick="filterArea('Lebu')">Lebu</button>
+                    <button class="area-card" onclick="filterArea('Akaki')">Akaki</button>
+
+                </div>
+
+            </div>
+
+
+            <div class="area-group">
+
+                <h4>Around Addis Ababa</h4>
+
+                <div class="area-list">
+
+                    <button class="area-card" onclick="filterArea('Burayu')">Burayu</button>
+                    <button class="area-card" onclick="filterArea('Sebeta')">Sebeta</button>
+                    <button class="area-card" onclick="filterArea('Sheger')">Sheger</button>
+                    <button class="area-card" onclick="filterArea('Koye')">Koye</button>
+                    <button class="area-card" onclick="filterArea('Tulu Dimtu')">Tulu Dimtu</button>
+                    <button class="area-card" onclick="filterArea('Sululta')">Sululta</button>
+                    <button class="area-card" onclick="filterArea('Gelan')">Gelan</button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- CURRENT FILTER -->
+
+    <div id="selectedFilter" class="selected-filter"></div>
+
+
+    <!-- JOB RESULTS -->
+
+    <section class="jobs-results">
+
+        <div id="jobList" class="listing-list">
+
+            <div class="message-box">
+                Loading approved jobs...
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<!-- SUPABASE -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+
+<script src="supabase.js"></script>
+<script src="auth-ui.js"></script>
+
+
+<script>
+
+    let allJobs = [];
+
+    let selectedCity = null;
+    let selectedArea = null;
+
+
+    // --------------------------------------------------
+    // LOAD APPROVED JOBS FROM SUPABASE
+    // --------------------------------------------------
+
+    async function loadJobs() {
+        const jobList = document.getElementById("jobList");
+
+        jobList.innerHTML = `
+            <div class="message-box">
+                Loading approved jobs...
+            </div>
+        `;
+
+
+        if (!window.supabaseClient) {
+
+            jobList.innerHTML = `
+                <div class="message-box error-box">
+                    Supabase is not connected.
+                </div>
+            `;
+
+            return;
+        }
+
+
+        try {
+
+            const { data, error } = await window.supabaseClient
+                .from("listings")
+                .select("*")
+                .eq("listing_type", "job")
+                .eq("status", "approved")
+                .order("posted_at", { ascending: false });
+
+
+            if (error) {
+                throw error;
+            }
+
+
+            allJobs = (data || []).filter(job => !job.expire_at || new Date(job.expire_at) >= new Date());
+
+            renderJobs();
+
+        } catch (error) {
+
+            console.error("Error loading jobs:", error);
+
+            jobList.innerHTML = `
+                <div class="message-box error-box">
+                    <strong>Could not load jobs.</strong>
+                    <br><br>
+                    ${escapeHtml(error.message || "Unknown error")}
+                </div>
+            `;
+        }
+    }
+
+
+    // --------------------------------------------------
+    // RENDER JOBS
+    // --------------------------------------------------
+
+    const JOB_CATEGORY_IMAGES = {
+        "Accounting & Finance / ሂሳብ እና ፋይናንስ": "images/jobs/accounting.jpg",
+        "Administration / አስተዳደር": "images/jobs/admin.jpg",
+        "Customer Service / የደንበኛ አገልግሎት": "images/jobs/customer-service.jpg",
+        "Data Entry / የዳታ ማስገቢያ": "images/jobs/data-entry.jpg",
+        "Sales & Marketing / ሽያጭ እና ማርኬቲንግ": "images/jobs/sales-marketing.jpg",
+        "Information Technology / ኢንፎርሜሽን ቴክኖሎጂ": "images/jobs/it.jpg",
+        "Engineering / ኢንጂነሪንግ": "images/jobs/engineering.jpg",
+        "Healthcare & Medical / ጤና እና ሕክምና": "images/jobs/healthcare.jpg",
+        "Education & Teaching / ትምህርት እና አስተማሪ": "images/jobs/education.jpg",
+        "Construction / ግንባታ": "images/jobs/construction.jpg",
+        "Human Resources / የሰው ሃብት": "images/jobs/hr.jpg",
+        "Banking & Insurance / ባንክ እና ኢንሹራንስ": "images/jobs/banking.jpg",
+        "Legal / ሕግ": "images/jobs/legal.jpg",
+        "Hospitality & Tourism / ሆቴል እና ቱሪዝም": "images/jobs/hospitality.jpg",
+        "Transportation & Logistics / ትራንስፖርት እና ሎጂስቲክስ": "images/jobs/transportation.jpg",
+        "Driving / ሹፌር": "images/jobs/driving.jpg",
+        "Manufacturing / ማምረት": "images/jobs/manufacturing.jpg",
+        "Agriculture & Farming / ግብርና": "images/jobs/agriculture.jpg",
+        "NGO & Development / ኤንጂኦ እና ልማት": "images/jobs/ngo.jpg",
+        "Security / ጥበቃ": "images/jobs/security.jpg",
+        "Retail & Shop / የሱቅ እና ችርቻሮ ስራ": "images/jobs/retail.jpg",
+        "Mechanic & Automotive / መካኒክ እና አውቶሞቲቭ": "images/jobs/mechanic.jpg",
+        "Electrician / ኤሌክትሪሺያን": "images/jobs/electrician.jpg",
+        "Plumber / የቧንቧ ስራ": "images/jobs/plumber.jpg",
+        "Welder / የብረት ብየዳ ስራ": "images/jobs/welder.jpg",
+        "Carpenter / የአናጢ ስራ": "images/jobs/carpenter.jpg",
+        "Mason & Construction Worker / ግንበኛ": "images/jobs/mason.jpg",
+        "Cleaner & Housekeeping / የጽዳት እና የቤት አያያዝ": "images/jobs/cleaner.jpg",
+        "Domestic Worker / የቤት ሰራተኛ": "images/jobs/domestic-worker.jpg",
+        "Cook & Chef / ምግብ አብሳይ እና ሼፍ": "images/jobs/cook.jpg",
+        "Waiter & Restaurant Staff / አስተናጋጅ እና የሬስቶራንት ሰራተኛ": "images/jobs/waiter.jpg",
+        "Beauty & Salon / የውበት እና ሳሎን ስራ": "images/jobs/beauty.jpg",
+        "Tailoring & Fashion / ስፌት እና ፋሽን": "images/jobs/tailoring.jpg",
+        "Factory & Production / ፋብሪካ እና ምርት": "images/jobs/factory.jpg",
+        "Warehouse & Storekeeper / መጋዘን እና የመጋዘን ሰራተኛ": "images/jobs/warehouse.jpg",
+        "Procurement & Purchasing / ግዥ": "images/jobs/procurement.jpg",
+        "Research & Laboratory / ምርምር እና ላቦራቶሪ": "images/jobs/research.jpg",
+        "Pharmacy / ፋርማሲ": "images/jobs/pharmacy.jpg",
+        "Social Work / ማህበራዊ ስራ": "images/jobs/social-work.jpg",
+        "Real Estate / ሪል እስቴት": "images/jobs/real-estate.jpg",
+        "Graphic Design / ግራፊክ ዲዛይን": "images/jobs/graphic-design.jpg",
+        "Photography & Video / ፎቶግራፍ እና ቪዲዮ": "images/jobs/photography.jpg",
+        "Translation & Language / ትርጉም እና ቋንቋ": "images/jobs/translation.jpg",
+        "Freelance & Remote Work / ፍሪላንስ እና የርቀት ስራ": "images/jobs/freelance.jpg",
+        "Other / ሌላ": "images/jobs/other.jpg"
+    };
+
+    function getJobImage(category) {
+
+        const value = String(category || "").trim();
+
+        if (JOB_CATEGORY_IMAGES[value]) {
+            return JOB_CATEGORY_IMAGES[value];
+        }
+
+        // Match category names even when the saved listing uses
+        // a slightly different spelling or language.
+        const normalized = value.toLowerCase();
+
+        const keywordImages = [
+            ["account", "images/jobs/accounting.jpg"],
+            ["finance", "images/jobs/accounting.jpg"],
+            ["administr", "images/jobs/admin.jpg"],
+            ["customer", "images/jobs/customer-service.jpg"],
+            ["data", "images/jobs/data-entry.jpg"],
+            ["entry", "images/jobs/data-entry.jpg"],
+            ["sales", "images/jobs/sales-marketing.jpg"],
+            ["marketing", "images/jobs/sales-marketing.jpg"],
+            ["information technology", "images/jobs/it.jpg"],
+            ["it ", "images/jobs/it.jpg"],
+            ["engineer", "images/jobs/engineering.jpg"],
+            ["health", "images/jobs/healthcare.jpg"],
+            ["medical", "images/jobs/healthcare.jpg"],
+            ["teacher", "images/jobs/education.jpg"],
+            ["education", "images/jobs/education.jpg"],
+            ["construct", "images/jobs/construction.jpg"],
+            ["human resource", "images/jobs/hr.jpg"],
+            ["hr", "images/jobs/hr.jpg"],
+            ["bank", "images/jobs/banking.jpg"],
+            ["insurance", "images/jobs/banking.jpg"],
+            ["legal", "images/jobs/legal.jpg"],
+            ["hospital", "images/jobs/hospitality.jpg"],
+            ["tourism", "images/jobs/hospitality.jpg"],
+            ["transport", "images/jobs/transportation.jpg"],
+            ["logistic", "images/jobs/transportation.jpg"],
+            ["driv", "images/jobs/driving.jpg"],
+            ["manufactur", "images/jobs/manufacturing.jpg"],
+            ["factory", "images/jobs/factory.jpg"],
+            ["agric", "images/jobs/agriculture.jpg"],
+            ["farm", "images/jobs/agriculture.jpg"],
+            ["ngo", "images/jobs/ngo.jpg"],
+            ["development", "images/jobs/ngo.jpg"],
+            ["security", "images/jobs/security.jpg"],
+            ["retail", "images/jobs/retail.jpg"],
+            ["shop", "images/jobs/retail.jpg"],
+            ["mechanic", "images/jobs/mechanic.jpg"],
+            ["automotive", "images/jobs/mechanic.jpg"],
+            ["electric", "images/jobs/electrician.jpg"],
+            ["plumb", "images/jobs/plumber.jpg"],
+            ["weld", "images/jobs/welder.jpg"],
+            ["carpent", "images/jobs/carpenter.jpg"],
+            ["mason", "images/jobs/mason.jpg"],
+            ["clean", "images/jobs/cleaner.jpg"],
+            ["housekeeping", "images/jobs/cleaner.jpg"],
+            ["domestic", "images/jobs/domestic-worker.jpg"],
+            ["cook", "images/jobs/cook.jpg"],
+            ["chef", "images/jobs/cook.jpg"],
+            ["waiter", "images/jobs/waiter.jpg"],
+            ["restaurant", "images/jobs/waiter.jpg"],
+            ["beauty", "images/jobs/beauty.jpg"],
+            ["salon", "images/jobs/beauty.jpg"],
+            ["tailor", "images/jobs/tailoring.jpg"],
+            ["fashion", "images/jobs/tailoring.jpg"],
+            ["warehouse", "images/jobs/warehouse.jpg"],
+            ["storekeeper", "images/jobs/warehouse.jpg"],
+            ["procurement", "images/jobs/procurement.jpg"],
+            ["purchasing", "images/jobs/procurement.jpg"],
+            ["research", "images/jobs/research.jpg"],
+            ["laboratory", "images/jobs/research.jpg"],
+            ["lab", "images/jobs/research.jpg"],
+            ["pharmacy", "images/jobs/pharmacy.jpg"],
+            ["social work", "images/jobs/social-work.jpg"],
+            ["real estate", "images/jobs/real-estate.jpg"],
+            ["graphic", "images/jobs/graphic-design.jpg"],
+            ["design", "images/jobs/graphic-design.jpg"],
+            ["photo", "images/jobs/photography.jpg"],
+            ["video", "images/jobs/photography.jpg"],
+            ["freelance", "images/jobs/freelance.jpg"],
+            ["remote", "images/jobs/freelance.jpg"],
+            ["translation", "images/jobs/translation.jpg"]
+        ];
+
+        for (const [keyword, image] of keywordImages) {
+            if (normalized.includes(keyword)) {
+                return image;
+            }
+        }
+
+        return "images/jobs/other.jpg";
+    }
+
+    function renderJobs() {
+
+        const jobList = document.getElementById("jobList");
+
+        let filteredJobs = allJobs;
+
+
+        // Filter by city
+
+        if (selectedCity) {
+
+            filteredJobs = filteredJobs.filter(job =>
+                sameValue(job.city, selectedCity)
+            );
+
+        }
+
+
+        // Filter by area
+
+        if (selectedArea) {
+
+            filteredJobs = filteredJobs.filter(job =>
+                sameValue(job.area, selectedArea)
+            );
+
+        }
+
+
+        // No results
+
+        if (filteredJobs.length === 0) {
+
+            let message = "There are no approved jobs available";
+
+            if (selectedArea) {
+                message += ` in ${selectedArea}.`;
+            } else if (selectedCity) {
+                message += ` in ${selectedCity}.`;
+            } else {
+                message += " yet.";
+            }
+
+
+            jobList.innerHTML = `
+                <div class="message-box">
+                    ${escapeHtml(message)}
+                </div>
+            `;
+
+            return;
+        }
+
+
+        // Create job cards
+
+        jobList.innerHTML = filteredJobs.map(job => {
+
+            const title = job.title || "Untitled Job";
+
+            const city = job.city || "";
+
+            const area = job.area || "";
+
+            let location = "Location not specified";
+
+            if (area && city) {
+                location = `${area}, ${city}`;
+            } else if (city) {
+                location = city;
+            } else if (area) {
+                location = area;
+            }
+
+
+            const employmentType =
+                job.employment_type || "Not specified";
+
+
+            const salary =
+                job.salary || "Negotiable";
+
+
+            const posted =
+                formatPostedTime(job.created_at);
+
+
+            return `
+
+                <article class="listing-card job-card">
+                    <div class="job-card-image-wrap">
+                        <img
+                            class="job-card-image"
+                            src="${getJobImage(job.category)}"
+                            alt="${escapeHtml(job.category || 'Job opportunity')}"
+                            loading="lazy"
+                            onerror="this.src='images/jobs/other.jpg'"
+                        >
+                        <span class="job-category-badge">${escapeHtml(job.category || 'Job Opportunity')}</span>
+                    </div>
+                    <div class="job-card-content">
+                        <h3>${escapeHtml(title)}</h3>
+                        <p>📍 ${escapeHtml(location)}</p>
+                        <p>💼 ${escapeHtml(employmentType)}</p>
+                        <p>💰 ${escapeHtml(salary)}</p>
+                        <p>🕒 ${escapeHtml(posted)}</p>
+                        <a href="details.html?id=${encodeURIComponent(job.id)}" class="view-details">View Details</a>
+                    </div>
+                </article>
+
+            `;
+
+        }).join("");
+
+    }
+
+
+    // --------------------------------------------------
+    // CITY FILTER
+    // --------------------------------------------------
+
+    function filterCity(city) {
+
+        selectedCity = city;
+
+        selectedArea = null;
+
+
+        // Show Addis areas only for Addis Ababa
+
+        if (sameValue(city, "Addis Ababa")) {
+
+            document.getElementById("addisAreas").style.display = "block";
+
+        } else {
+
+            document.getElementById("addisAreas").style.display = "none";
+
+        }
+
+
+        updateFilterText();
+
+        renderJobs();
+
+    }
+
+
+    // --------------------------------------------------
+    // AREA FILTER
+    // --------------------------------------------------
+
+    function filterArea(area) {
+
+        selectedCity = "Addis Ababa";
+
+        selectedArea = area;
+
+
+        document.getElementById("addisAreas").style.display = "block";
+
+
+        updateFilterText();
+
+        renderJobs();
+
+    }
+
+
+    // --------------------------------------------------
+    // FILTER MESSAGE
+    // --------------------------------------------------
+
+    function updateFilterText() {
+
+        const filterBox =
+            document.getElementById("selectedFilter");
+
+
+        if (!selectedCity) {
+
+            filterBox.style.display = "none";
+
+            filterBox.innerHTML = "";
+
+            return;
+        }
+
+
+        filterBox.style.display = "block";
+
+
+        if (selectedArea) {
+
+            filterBox.innerHTML = `
+                Showing approved jobs in
+                <strong>
+                    ${escapeHtml(selectedArea)}, ${escapeHtml(selectedCity)}
+                </strong>
+            `;
+
+        } else {
+
+            filterBox.innerHTML = `
+                Showing approved jobs in
+                <strong>${escapeHtml(selectedCity)}</strong>
+            `;
+
+        }
+
+    }
+
+
+    // --------------------------------------------------
+    // TIME FORMAT
+    // --------------------------------------------------
+
+    function formatPostedTime(dateString) {
+
+        if (!dateString) {
+            return "Recently posted";
+        }
+
+
+        const date = new Date(dateString);
+
+        if (isNaN(date.getTime())) {
+            return "Recently posted";
+        }
+
+
+        const now = new Date();
+
+        const difference =
+            Math.floor((now - date) / 1000);
+
+
+        if (difference < 60) {
+            return "Just now";
+        }
+
+
+        const minutes =
+            Math.floor(difference / 60);
+
+
+        if (minutes < 60) {
+
+            return `${minutes} min${minutes === 1 ? "" : "s"} ago`;
+
+        }
+
+
+        const hours =
+            Math.floor(minutes / 60);
+
+
+        if (hours < 24) {
+
+            return `${hours} hr${hours === 1 ? "" : "s"} ago`;
+
+        }
+
+
+        const days =
+            Math.floor(hours / 24);
+
+
+        if (days < 30) {
+
+            return `${days} day${days === 1 ? "" : "s"} ago`;
+
+        }
+
+
+        return date.toLocaleDateString();
+
+    }
+
+
+    // --------------------------------------------------
+    // SAFETY
+    // --------------------------------------------------
+
+    function escapeHtml(value) {
+
+        return String(value ?? "")
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+
+    }
+
+
+    function sameValue(a, b) {
+
+        return String(a || "")
+            .trim()
+            .toLowerCase()
+            ===
+            String(b || "")
+                .trim()
+                .toLowerCase();
+
+    }
+
+
+    // --------------------------------------------------
+    // START
+    // --------------------------------------------------
+
+    loadJobs();
+
+</script>
+
+</body>
+</html>

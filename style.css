@@ -1,0 +1,667 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f5f7fa;
+    color: #333;
+}
+
+h1 {
+    color: #0066cc;
+}.navbar {
+    background-color: #0066cc;
+    color: white;
+    padding: 15px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo h1 {
+    margin: 0;
+    color: white;
+}
+
+.logo span {
+    font-size: 14px;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    margin-left: 25px;
+    font-weight: bold;
+}
+
+nav a:hover {
+    text-decoration: underline;
+}.hero {
+    text-align: center;
+    padding: 80px 20px;
+    background-color: white;
+}
+
+.hero h2 {
+    font-size: 40px;
+    margin-bottom: 15px;
+}
+
+.hero p {
+    font-size: 18px;
+    color: #666;
+    margin-bottom: 30px;
+}
+
+.hero-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.btn {
+    display: inline-block;
+    background-color: #0066cc;
+    color: white;
+    padding: 14px 30px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.btn:hover {
+    background-color: #004c99;
+}.cities {
+    padding: 50px 40px;
+    background-color: #f5f7fa;
+}
+
+.section-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.section-title h2 {
+    margin: 0;
+    font-size: 28px;
+}
+
+.see-more {
+    color: #0066cc;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.see-more:hover {
+    text-decoration: underline;
+}
+
+.city-list {
+    display: flex;
+    gap: 15px;
+    overflow-x: auto;
+    padding: 10px 5px 15px;
+    white-space: nowrap;
+}.city-list::-webkit-scrollbar {
+    height: 8px;
+}
+
+.city-list::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 10px;
+}
+
+.city-card {flex: 0 0 auto;
+    background-color: white;
+    color: #333;
+    text-decoration: none;
+    padding: 18px 25px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    font-weight: bold;
+    transition: 0.2s;
+}
+
+.city-card:hover {
+    color: #0066cc;
+    transform: translateY(-2px);
+}/* LATEST JOBS & HOMES */
+
+.latest-section {
+    padding: 50px 40px;
+    background-color: white;
+}
+
+.listing-list {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+}
+
+.listing-card {
+    flex: 1;
+    background-color: #f5f7fa;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.listing-card h3 {
+    margin-top: 0;
+    color: #0066cc;
+}
+
+.listing-card p {
+    color: #666;
+}/* VIEW DETAILS BUTTON */ .view-details { display: inline-block; margin-top: 10px; background-color: #0066cc; color: white; padding: 10px 18px; border-radius: 6px; text-decoration: none; font-weight: bold; } .view-details:hover { background-color: #004c99; }
+/* =========================================================
+   EthioLifeLink VISUAL REFRESH — LAYOUT ONLY
+   Keeps existing functionality while improving appearance.
+   ========================================================= */
+:root{
+  --ac-primary:#1268d5;
+  --ac-primary-dark:#0b4fa8;
+  --ac-primary-soft:#eaf3ff;
+  --ac-text:#172033;
+  --ac-muted:#667085;
+  --ac-bg:#f6f8fc;
+  --ac-card:#ffffff;
+  --ac-border:#e5e9f0;
+  --ac-shadow:0 10px 30px rgba(18,42,76,.08);
+  --ac-radius:16px;
+}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  background:var(--ac-bg) !important;
+  color:var(--ac-text) !important;
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Arial,sans-serif !important;
+  line-height:1.55;
+}
+
+/* Header */
+.navbar,
+body>header:not(.navbar){
+  background:linear-gradient(135deg,#075fc9 0%,#1684e8 100%) !important;
+  color:#fff !important;
+  min-height:72px;
+  padding:14px clamp(18px,4vw,56px) !important;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:24px;
+  box-shadow:0 5px 20px rgba(8,67,139,.16);
+  position:relative;
+  z-index:20;
+}
+.logo{min-width:0}
+.logo h1,.logo h2,
+body>header .logo h1{
+  margin:0 !important;
+  color:#fff !important;
+  font-size:clamp(22px,2.2vw,30px) !important;
+  font-weight:800 !important;
+  letter-spacing:-.5px;
+}
+.logo span,.logo p,
+body>header .logo p{
+  margin:2px 0 0 !important;
+  color:rgba(255,255,255,.84) !important;
+  font-size:12px !important;
+}
+nav{display:flex;align-items:center;justify-content:flex-end;gap:6px;flex-wrap:wrap}
+nav a{
+  color:#fff !important;
+  text-decoration:none !important;
+  margin-left:0 !important;
+  padding:9px 13px;
+  border-radius:9px;
+  font-size:14px;
+  font-weight:700;
+  transition:background .2s,transform .2s;
+}
+nav a:hover{background:rgba(255,255,255,.16);transform:translateY(-1px)}
+nav a.active{background:rgba(255,255,255,.18)}
+
+/* Home / page hero */
+.hero{
+  position:relative;
+  overflow:hidden;
+  padding:clamp(58px,8vw,100px) 20px !important;
+  text-align:center;
+  color:#fff !important;
+  background:
+    radial-gradient(circle at 12% 20%,rgba(255,255,255,.20),transparent 28%),
+    radial-gradient(circle at 88% 12%,rgba(255,255,255,.14),transparent 25%),
+    linear-gradient(135deg,#075fc9,#1395e9 58%,#22a9e8) !important;
+  min-height:280px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+}
+.hero:after{
+  content:"";
+  position:absolute;
+  left:-5%;right:-5%;bottom:-42px;height:100px;
+  background:rgba(255,255,255,.12);
+  border-radius:50% 50% 0 0;
+  transform:rotate(-2deg);
+}
+.hero h2{
+  position:relative;z-index:1;
+  color:#fff !important;
+  font-size:clamp(30px,5vw,52px) !important;
+  line-height:1.1;
+  margin:0 0 15px !important;
+  letter-spacing:-1.3px;
+}
+.hero p{
+  position:relative;z-index:1;
+  color:rgba(255,255,255,.9) !important;
+  max-width:700px;
+  font-size:clamp(15px,2vw,19px) !important;
+  margin:0 0 28px !important;
+}
+.hero-buttons{position:relative;z-index:2;display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+
+.btn,.view-details,.contact-button,.apply-button,.choice-button{
+  background:var(--ac-primary) !important;
+  border:none !important;
+  border-radius:10px !important;
+  padding:11px 18px !important;
+  color:#fff !important;
+  text-decoration:none !important;
+  font-weight:750 !important;
+  box-shadow:0 5px 15px rgba(18,104,213,.18);
+  transition:transform .2s,box-shadow .2s,background .2s;
+}
+.hero .btn{background:#fff !important;color:#075fc9 !important;box-shadow:0 8px 22px rgba(0,0,0,.12)}
+.btn:hover,.view-details:hover,.contact-button:hover,.apply-button:hover,.choice-button:hover{background:var(--ac-primary-dark) !important;transform:translateY(-2px);box-shadow:0 8px 20px rgba(18,104,213,.25)}
+.hero .btn:hover{background:#f3f8ff !important;color:#075fc9 !important}
+
+/* Sections */
+.cities,.latest-section,.jobs-page,.jobs-results,.details-section{
+  padding-left:clamp(16px,4vw,56px) !important;
+  padding-right:clamp(16px,4vw,56px) !important;
+}
+.cities{padding-top:46px !important;padding-bottom:46px !important;background:var(--ac-bg) !important}
+.latest-section{padding-top:48px !important;padding-bottom:48px !important;background:#fff !important}
+.section-title{margin-bottom:20px !important;gap:18px}
+.section-title h2,.jobs-header h2,.city-section h2{
+  color:var(--ac-text) !important;
+  font-size:clamp(22px,3vw,30px) !important;
+  margin:0 !important;
+  letter-spacing:-.5px;
+}
+.see-more{color:var(--ac-primary) !important;font-size:14px}
+
+/* Horizontal city/filter rows */
+.city-list,.area-list{
+  gap:12px !important;
+  padding:7px 3px 16px !important;
+  scrollbar-width:thin;
+}
+.city-list::-webkit-scrollbar,.area-list::-webkit-scrollbar{height:6px}
+.city-list::-webkit-scrollbar-thumb,.area-list::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:20px}
+.city-card,.area-card{
+  background:#fff !important;
+  color:#27364d !important;
+  border:1px solid var(--ac-border) !important;
+  border-radius:12px !important;
+  padding:12px 18px !important;
+  box-shadow:0 3px 12px rgba(15,36,67,.05) !important;
+  font-weight:700 !important;
+  transition:all .2s ease !important;
+}
+.city-card:hover,.area-card:hover{
+  background:var(--ac-primary) !important;
+  color:#fff !important;
+  border-color:var(--ac-primary) !important;
+  transform:translateY(-2px);
+}
+#addis-areas,.addis-areas{
+  background:#fff !important;
+  border:1px solid var(--ac-border) !important;
+  border-radius:var(--ac-radius) !important;
+  box-shadow:var(--ac-shadow) !important;
+}
+#addis-areas h3,.addis-areas h3{color:var(--ac-primary) !important}
+
+/* Listing grids/cards */
+.listing-list{
+  display:grid !important;
+  grid-template-columns:repeat(4,minmax(0,1fr)) !important;
+  gap:20px !important;
+}
+.listing-card{
+  background:#fff !important;
+  border:1px solid var(--ac-border) !important;
+  border-radius:var(--ac-radius) !important;
+  padding:22px !important;
+  box-shadow:var(--ac-shadow) !important;
+  min-width:0;
+  transition:transform .2s,box-shadow .2s;
+}
+.listing-card:hover{transform:translateY(-4px);box-shadow:0 16px 35px rgba(18,42,76,.12) !important}
+.listing-card h3{color:var(--ac-text) !important;font-size:18px !important;line-height:1.3;margin:0 0 12px !important}
+.listing-card p{color:var(--ac-muted) !important;margin:8px 0 !important;font-size:14px}
+.listing-card .view-details{margin-top:12px}
+
+/* Jobs page */
+.jobs-page{max-width:1400px;margin:0 auto}
+.jobs-header{text-align:left !important;padding:32px 0 10px !important}
+.jobs-header p{color:var(--ac-muted) !important;margin:6px 0 0}
+.city-section{margin-bottom:26px !important}
+.selected-filter{background:var(--ac-primary-soft) !important;border-left:4px solid var(--ac-primary) !important;border-radius:10px !important}
+.jobs-results{padding-top:10px !important}
+.message-box{border:1px solid var(--ac-border) !important;border-radius:14px !important;box-shadow:var(--ac-shadow) !important}
+
+/* Forms / Add Listing */
+main{min-height:calc(100vh - 72px)}
+.form-container{
+  max-width:950px !important;
+  margin:36px auto !important;
+  padding:clamp(22px,4vw,38px) !important;
+  border:1px solid var(--ac-border) !important;
+  border-radius:18px !important;
+  box-shadow:var(--ac-shadow) !important;
+}
+.form-container h2{color:var(--ac-text) !important;font-size:26px !important}
+.note{background:var(--ac-primary-soft) !important;border-left:4px solid var(--ac-primary) !important;border-radius:10px !important;color:#36506e}
+.choice-container{gap:18px !important}
+.choice-card{background:#fff !important;border:1px solid var(--ac-border) !important;border-radius:16px !important;box-shadow:0 5px 18px rgba(15,36,67,.05)}
+.choice-card h3{color:var(--ac-text) !important}
+.choice-card p{color:var(--ac-muted) !important}
+.listing-form label{color:#344054;font-weight:700}
+.listing-form input,.listing-form select,.listing-form textarea,
+.form-container input,.form-container select,.form-container textarea{
+  border:1px solid #d7dde7 !important;
+  border-radius:9px !important;
+  background:#fff !important;
+  min-height:44px;
+  padding:10px 12px !important;
+  font:inherit;
+}
+.listing-form input:focus,.listing-form select:focus,.listing-form textarea:focus,
+.form-container input:focus,.form-container select:focus,.form-container textarea:focus{
+  outline:none;border-color:#58a0ee !important;box-shadow:0 0 0 3px rgba(18,104,213,.10) !important;
+}
+
+/* Details */
+.details-section{padding-top:40px !important;padding-bottom:60px !important}
+.details-container{max-width:980px !important;border:1px solid var(--ac-border);border-radius:18px !important;box-shadow:var(--ac-shadow) !important;padding:clamp(22px,4vw,40px) !important}
+.details-title{color:var(--ac-text) !important;font-size:clamp(26px,4vw,38px) !important}
+.details-info p,.description,.details-list{color:#536174 !important}
+.details-price{color:var(--ac-primary) !important}
+.contact-box{background:#f7f9fc !important;border:1px solid var(--ac-border)}
+
+/* Auth */
+.auth-wrap{max-width:500px !important;margin:55px auto !important}
+.auth-card{border:1px solid var(--ac-border);border-radius:18px !important;box-shadow:var(--ac-shadow) !important;padding:34px !important}
+.auth-card h1{color:var(--ac-text) !important}
+.auth-card input{border:1px solid #d7dde7 !important;border-radius:9px !important;min-height:44px}
+.auth-tabs button{border-radius:9px !important;border:1px solid var(--ac-border) !important;padding:11px !important}
+.auth-tabs button.active{background:var(--ac-primary) !important}
+.auth-card button{border:0;border-radius:9px;background:var(--ac-primary);color:#fff;font-weight:700}
+
+/* Generic admin styling */
+.admin-container{max-width:1200px !important;margin:35px auto !important;padding:0 20px}
+.admin-header,.admin-actions,.listing-card{border-radius:16px !important}
+
+/* Mobile */
+@media (max-width:1050px){
+  .listing-list{grid-template-columns:repeat(2,minmax(0,1fr)) !important}
+}
+@media (max-width:760px){
+  .navbar,body>header:not(.navbar){flex-direction:column;align-items:flex-start;padding:14px 18px !important}
+  nav{width:100%;justify-content:flex-start;overflow-x:auto;flex-wrap:nowrap;padding-bottom:2px}
+  nav a{white-space:nowrap;font-size:13px;padding:8px 10px}
+  .hero{min-height:250px;padding:55px 18px !important}
+  .hero h2{font-size:32px !important}
+  .listing-list{grid-template-columns:1fr !important}
+  .choice-container{grid-template-columns:1fr !important}
+  .section-title{align-items:flex-start !important}
+}
+@media (max-width:480px){
+  .hero-buttons{width:100%}
+  .hero .btn{width:100%;max-width:280px}
+  .form-container{margin:18px 12px !important}
+  .auth-wrap{margin:25px 12px !important}
+  .auth-card{padding:22px !important}
+}
+
+/* =========================================================
+   ADDIS ABABA BACKGROUND — ALL PAGES
+   Uses the Addis Ababa skyline supplied for EthioLifeLink.
+   ========================================================= */
+body{
+  background-image:
+    linear-gradient(rgba(7,40,78,.38), rgba(7,40,78,.38)),
+    url("../images/backgrounds/addis-ababa.jpg") !important;
+  background-size:cover !important;
+  background-position:center center !important;
+  background-repeat:no-repeat !important;
+  background-attachment:fixed !important;
+  min-height:100vh;
+}
+
+/* Glass-style header so the skyline remains visible behind it. */
+.navbar,
+body>header:not(.navbar){
+  background:rgba(255,255,255,.93) !important;
+  color:#0b3f82 !important;
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+  border-bottom:1px solid rgba(255,255,255,.75);
+}
+.logo h1,.logo h2,
+body>header .logo h1{
+  color:#1268d5 !important;
+}
+.logo span,.logo p,
+body>header .logo p{
+  color:#58708e !important;
+}
+nav a{
+  color:#163b67 !important;
+}
+nav a:hover,
+nav a.active{
+  background:#eaf3ff !important;
+  color:#1268d5 !important;
+}
+
+/* Homepage hero uses the same skyline prominently. */
+.hero{
+  background:
+    linear-gradient(rgba(5,44,91,.48), rgba(5,44,91,.48)),
+    url("../images/backgrounds/addis-ababa.jpg") center center / cover no-repeat !important;
+  min-height:360px;
+}
+
+/* Let the skyline remain visible between the cards/sections. */
+.cities,
+.latest-section,
+.jobs-page,
+.jobs-results,
+.details-section{
+  background:rgba(246,248,252,.90) !important;
+  backdrop-filter:blur(2px);
+  -webkit-backdrop-filter:blur(2px);
+}
+
+.latest-section:nth-of-type(even){
+  background:rgba(255,255,255,.91) !important;
+}
+
+/* Main page containers become clean glass panels. */
+.form-container,
+.details-container,
+.auth-card,
+.message-box,
+.addis-areas,
+#addis-areas{
+  background:rgba(255,255,255,.96) !important;
+}
+
+/* Keep listing cards crisp above the background. */
+.listing-card,
+.city-card,
+.area-card,
+.choice-card{
+  background:rgba(255,255,255,.97) !important;
+}
+
+/* Mobile: keep the background fixed without forcing horizontal overflow. */
+@media (max-width:760px){
+  body{
+    background-position:center top !important;
+    background-attachment:scroll !important;
+  }
+}
+
+
+/* =========================================================
+   2026 VISUAL UPDATE — CLEARER SKYLINE + JOB IMAGES
+   ========================================================= */
+body{
+  background-image:
+    linear-gradient(rgba(7,40,78,.16), rgba(7,40,78,.16)),
+    url("../images/backgrounds/addis-ababa.jpg") !important;
+  background-size:cover !important;
+  background-position:center center !important;
+  background-repeat:no-repeat !important;
+  background-attachment:fixed !important;
+}
+.hero{
+  background:
+    linear-gradient(rgba(5,44,91,.28), rgba(5,44,91,.28)),
+    url("../images/backgrounds/addis-ababa.jpg") center center / cover no-repeat !important;
+  box-shadow:inset 0 -45px 80px rgba(0,0,0,.08);
+}
+.jobs-page{
+  background:rgba(246,248,252,.54) !important;
+  border-radius:0 0 24px 24px;
+  padding-bottom:44px !important;
+}
+.jobs-header{
+  margin:22px 0 18px !important;
+  padding:32px clamp(18px,4vw,42px) !important;
+  border:1px solid rgba(255,255,255,.72);
+  border-radius:22px;
+  background:rgba(255,255,255,.68) !important;
+  box-shadow:0 14px 40px rgba(18,42,76,.08);
+  backdrop-filter:blur(7px);
+}
+.jobs-header h2{font-size:clamp(28px,4vw,42px) !important;color:#123b6d !important}
+.jobs-header p{font-size:16px !important}
+.city-section{
+  padding:24px clamp(18px,4vw,34px) !important;
+  border:1px solid rgba(255,255,255,.7);
+  border-radius:20px;
+  background:rgba(255,255,255,.62) !important;
+  box-shadow:0 12px 35px rgba(18,42,76,.07);
+  backdrop-filter:blur(6px);
+}
+.jobs-results{
+  background:transparent !important;
+  padding-top:28px !important;
+}
+.job-card-image-wrap{
+  position:relative;
+  width:calc(100% + 44px);
+  margin:-22px -22px 18px;
+  height:175px;
+  overflow:hidden;
+  border-radius:16px 16px 0 0;
+  background:#eaf3ff;
+}
+.job-card-image{
+  width:100%;height:100%;display:block;object-fit:cover;
+  transition:transform .35s ease;
+}
+.listing-card:hover .job-card-image{transform:scale(1.045)}
+.job-category-badge{
+  position:absolute;left:12px;bottom:12px;
+  max-width:calc(100% - 24px);
+  padding:7px 10px;border-radius:999px;
+  background:rgba(10,74,145,.88);color:#fff;
+  font-size:12px;font-weight:800;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  backdrop-filter:blur(5px);
+}
+.job-card-content{padding:0}
+.job-card-content h3{min-height:46px}
+.home-upload-box{
+  padding:18px;border:1px dashed #8bb9e9;border-radius:14px;
+  background:#f7fbff;margin-bottom:22px;
+}
+.home-upload-box input[type=file]{background:#fff !important;min-height:auto !important}
+.home-image-preview{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px;margin-top:12px;
+}
+.home-image-preview-item{position:relative;height:105px;border-radius:10px;overflow:hidden;background:#e8eef6}
+.home-image-preview-item img{width:100%;height:100%;object-fit:cover;display:block}
+.home-image-preview-item span{position:absolute;left:6px;bottom:6px;background:rgba(0,0,0,.62);color:#fff;padding:3px 6px;border-radius:6px;font-size:11px}
+.home-card-image-wrap{width:calc(100% + 44px);height:180px;margin:-22px -22px 18px;overflow:hidden;border-radius:16px 16px 0 0;background:#eaf3ff}
+.home-card-image{width:100%;height:100%;object-fit:cover;display:block}
+.home-card-placeholder{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:52px;background:linear-gradient(135deg,#eaf3ff,#d8e9fb)}
+.home-card-content h3{min-height:46px}
+@media(max-width:760px){
+  body{background-position:center top !important;background-attachment:scroll !important}
+  .jobs-header{border-radius:16px;padding:25px 18px !important}
+  .city-section{border-radius:16px}
+  .job-card-image-wrap,.home-card-image-wrap{height:165px}
+}
+
+/* =========================================================
+   CLEAR PAGE VIEW — SAMPLE-INSPIRED UPDATE
+   ========================================================= */
+body{
+  background-image:linear-gradient(rgba(255,255,255,.04),rgba(255,255,255,.04)),url("../images/backgrounds/addis-ababa.jpg") !important;
+  background-size:cover!important;background-position:center top!important;background-repeat:no-repeat!important;background-attachment:fixed!important;
+}
+.hero{
+  background:linear-gradient(90deg,rgba(5,45,92,.16),rgba(5,45,92,.08)),url("../images/backgrounds/addis-ababa.jpg") center 42%/cover no-repeat!important;
+  min-height:300px!important;
+  text-shadow:0 2px 8px rgba(0,0,0,.28);
+}
+.hero h2,.hero p{color:#fff!important}
+.hero .btn{text-shadow:none}
+.jobs-page{padding:0 0 54px!important;background:rgba(255,255,255,.94)!important}
+.jobs-header{
+  margin:0!important;padding:42px clamp(20px,5vw,70px)!important;min-height:205px!important;
+  display:flex;flex-direction:column;justify-content:center;align-items:flex-start;text-align:left!important;color:#fff;
+  background:linear-gradient(90deg,rgba(3,53,108,.55),rgba(8,101,181,.18)),url("../images/backgrounds/addis-ababa.jpg") center 42%/cover no-repeat!important;
+  border:0!important;border-radius:0!important;box-shadow:inset 0 -30px 60px rgba(0,0,0,.12)!important;
+}
+.jobs-header .page-kicker{font-size:13px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.35);padding:7px 12px;border-radius:999px;margin-bottom:10px}
+.jobs-header h2{color:#fff!important;font-size:clamp(30px,4vw,46px)!important;margin:0 0 8px!important;text-shadow:0 2px 10px rgba(0,0,0,.3)}
+.jobs-header p{color:rgba(255,255,255,.95)!important;margin:0!important;font-size:16px}
+.city-section{margin:24px auto 18px!important;max-width:1220px;padding:24px clamp(16px,3vw,30px)!important;background:#fff!important;border:1px solid #e2eaf3!important;border-radius:18px!important;box-shadow:0 8px 26px rgba(20,50,90,.08)!important}
+.city-section h2{color:#173b65!important}
+.jobs-results{max-width:1220px;margin:0 auto!important;padding:10px clamp(16px,3vw,30px) 50px!important;background:transparent!important}
+.jobs-results .listing-list{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:22px!important}
+.job-card{background:#fff!important;border:1px solid #e0e8f2!important;padding:22px!important;border-radius:16px!important;box-shadow:0 8px 26px rgba(20,50,90,.08)!important;overflow:hidden;transition:transform .2s,box-shadow .2s}
+.job-card:hover{transform:translateY(-4px);box-shadow:0 16px 34px rgba(20,50,90,.14)!important}
+.job-card-image-wrap{height:190px!important;margin:-22px -22px 18px!important;border-radius:16px 16px 0 0!important}
+.job-card-content h3{font-size:19px!important;color:#123f72!important}
+.message-box{background:#fff!important;border:1px solid #dfe7f1!important;box-shadow:0 8px 24px rgba(20,50,90,.07)!important}
+body:has(.home-card) .latest-section{background:rgba(255,255,255,.96)!important}
+.home-card{background:#fff!important;border:1px solid #e0e8f2!important;box-shadow:0 8px 26px rgba(20,50,90,.08)!important;overflow:hidden!important;padding:22px!important}
+.home-card:hover{transform:translateY(-4px);box-shadow:0 16px 34px rgba(20,50,90,.14)!important}
+@media(max-width:900px){.jobs-results .listing-list{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
+@media(max-width:620px){.jobs-results .listing-list{grid-template-columns:1fr!important}.jobs-header{min-height:190px!important}.hero{min-height:270px!important}}
+
+/* EthioLifeLink brand icon and modern navigation */
+.logo-with-icon{display:flex;align-items:center;gap:11px}
+.logo-icon-link{display:flex;align-items:center;flex:0 0 auto}
+.logo-icon-link img{width:48px;height:48px;object-fit:cover;border-radius:13px;background:#fff;padding:2px;box-shadow:0 5px 15px rgba(0,0,0,.16)}
+.logo-with-icon h1,.logo-with-icon h2{margin:0!important;line-height:1.05}
+.logo-with-icon span{display:block;margin-top:4px}
+.auth-user-pill{display:inline-flex!important;align-items:center;gap:7px!important;padding:6px 10px!important;border-radius:999px!important;background:rgba(255,255,255,.13)!important}
+.auth-user-avatar{width:27px;height:27px;border-radius:50%;object-fit:cover;background:#fff;vertical-align:middle}
+.page-brand-icon{width:72px;height:72px;object-fit:cover;border-radius:18px;box-shadow:0 10px 25px rgba(0,80,150,.16)}
+@media(max-width:720px){.logo-icon-link img{width:42px;height:42px}.logo-with-icon span{font-size:12px}}

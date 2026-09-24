@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>EthioLifeLink - Admin Login</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase.js"></script>
+    <link rel="icon" type="image/jpeg" href="images/site-icon.jpg">
+</head>
+
+<body>
+
+<header class="navbar">
+    <div class="logo logo-with-icon">
+        <a href="index.html" class="logo-icon-link" aria-label="EthioLifeLink home"><img src="images/site-icon.jpg" alt="EthioLifeLink logo"></a>
+        <div><h2>EthioLifeLink</h2><span>Job Vacancy and Home for Rent</span></div>
+    </div>
+
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="jobs.html">Jobs</a>
+        <a href="homes.html">Homes</a>
+        <a href="add-listing.html">Add Listing</a>
+    </nav>
+</header>
+
+
+<main style="
+    max-width: 450px;
+    margin: 80px auto;
+    padding: 20px;
+">
+
+    <div style="
+        background: white;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 3px 15px rgba(0,0,0,0.1);
+    ">
+
+        <h1 style="text-align:center;">
+            🔐 Admin Login
+        </h1>
+
+        <p style="text-align:center;">
+            Sign in to manage EthioLifeLink listings.
+        </p>
+
+        <form id="adminLoginForm">
+
+            <label for="adminEmail">
+                Email
+            </label>
+
+            <input
+                type="email"
+                id="adminEmail"
+                placeholder="Admin email"
+                required
+                style="
+                    width:100%;
+                    padding:12px;
+                    margin:8px 0 18px;
+                    box-sizing:border-box;
+                "
+            >
+
+
+            <label for="adminPassword">
+                Password
+            </label>
+
+            <input
+                type="password"
+                id="adminPassword"
+                placeholder="Admin password"
+                required
+                style="
+                    width:100%;
+                    padding:12px;
+                    margin:8px 0 18px;
+                    box-sizing:border-box;
+                "
+            >
+
+
+            <button
+                type="submit"
+                style="
+                    width:100%;
+                    padding:12px;
+                    cursor:pointer;
+                "
+            >
+                🔑 Login
+            </button>
+
+        </form>
+
+        <p
+            id="loginMessage"
+            style="margin-top:20px; text-align:center;"
+        ></p>
+
+    </div>
+
+</main>
+
+
+<script>
+
+// Always require a fresh admin login when this page is opened.
+// This does not affect the database or public user sessions.
+const ADMIN_LOGIN_PAGE = true;
+if (window.supabaseClient) {
+    window.supabaseClient.auth.signOut().catch(() => {});
+}
+
+document
+    .getElementById("adminLoginForm")
+    .addEventListener("submit", async function(event) {
+
+        event.preventDefault();
+
+        const email =
+            document.getElementById("adminEmail").value.trim();
+
+        const password =
+            document.getElementById("adminPassword").value;
+
+        const message =
+            document.getElementById("loginMessage");
+
+        const ADMIN_EMAIL = "mosisahailu196@gmail.com";
+
+        if (email.toLowerCase() !== ADMIN_EMAIL.toLowerCase()) {
+            message.textContent = "❌ This account is not authorized to access the admin dashboard.";
+            return;
+        }
+
+        message.textContent = "Logging in...";
+
+
+        if (!window.supabaseClient) {
+
+            message.textContent =
+                "❌ Supabase is not connected.";
+
+            return;
+        }
+
+
+        const { data, error } =
+            await window.supabaseClient.auth.signInWithPassword({
+                email: email,
+                password: password
+            });
+
+
+        if (error) {
+
+            console.error("Login error:", error);
+
+            message.textContent =
+                "❌ Login failed: " + error.message;
+
+            return;
+        }
+
+
+        console.log("Admin login successful:", data);
+
+        // Mark this browser tab as having completed the admin login.
+        sessionStorage.setItem("ethioLifeLinkAdminAuthorized", "true");
+        window.location.href = "admin.html";
+
+    });
+
+</script>
+
+</body>
+</html>
