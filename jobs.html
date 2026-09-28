@@ -202,6 +202,7 @@
         <a href="jobs.html">Jobs</a>
         <a href="homes.html">Homes</a>
         <a href="add-listing.html">Add Listing</a>
+    <a href="my-listings.html">My Listings</a>
     <a href="auth.html" id="auth-nav-link">Log in</a>
     </nav>
 
@@ -486,7 +487,11 @@
             }
 
 
-            allJobs = (data || []).filter(job => !job.expire_at || new Date(job.expire_at) >= new Date());
+            const today = new Date();
+            const todayKey = [today.getFullYear(), String(today.getMonth()+1).padStart(2,"0"), String(today.getDate()).padStart(2,"0")].join("-");
+            // Approved vacancies remain visible as announcements before applications open.
+            // Only expired vacancies are removed from the public list.
+            allJobs = (data || []).filter(job => !job.expire_at || job.expire_at >= todayKey);
 
             renderJobs();
 
@@ -757,6 +762,7 @@
                         <p>💼 ${escapeHtml(employmentType)}</p>
                         <p>💰 ${escapeHtml(salary)}</p>
                         <p>🕒 ${escapeHtml(posted)}</p>
+                        ${job.open_at ? `<p>📅 Applications: ${escapeHtml(job.open_at)}${job.expire_at ? ` → ${escapeHtml(job.expire_at)}` : ""}</p>` : (job.expire_at ? `<p>⏳ Expires: ${escapeHtml(job.expire_at)}</p>` : "")}
                         <a href="details.html?id=${encodeURIComponent(job.id)}" class="view-details">View Details</a>
                     </div>
                 </article>
