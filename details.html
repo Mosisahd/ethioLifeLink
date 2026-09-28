@@ -171,7 +171,8 @@ function renderListing(listing){
         <div class="detail-item"><strong>Experience</strong><span>${escapeHtml(listing.experience || 'Not specified')}</span></div>
         <div class="detail-item"><strong>Salary</strong><span class="details-price">${escapeHtml(price)}</span></div>
         <div class="detail-item"><strong>Location</strong><span>${escapeHtml(location)}</span></div>
-        <div class="detail-item"><strong>Vacancy Expire Date</strong><span>${escapeHtml(listing.expire_at ? new Date(listing.expire_at).toLocaleDateString() : 'Not specified')}</span></div>
+        <div class="detail-item"><strong>Application Start Date</strong><span>${escapeHtml(listing.open_at ? new Date(listing.open_at + 'T00:00:00').toLocaleDateString() : 'Immediately')}</span></div>
+        <div class="detail-item"><strong>Vacancy Expire Date</strong><span>${escapeHtml(listing.expire_at ? new Date(listing.expire_at + 'T00:00:00').toLocaleDateString() : 'Not specified')}</span></div>
         <div class="detail-item"><strong>Application Method</strong><span>${escapeHtml(applicationMethodLabel)}</span></div>
         ${listing.company_website ? `<div class="detail-item"><strong>Company Website</strong><span><a href="${escapeHtml(listing.company_website)}" target="_blank" rel="noopener">Visit Website</a></span></div>` : ''}
       </div>
@@ -181,6 +182,7 @@ function renderListing(listing){
       <div class="details-info">
         <div class="detail-item"><strong>Property Type</strong><span>${escapeHtml(listing.property_type || category || 'Property')}</span></div>
         <div class="detail-item"><strong>Rent</strong><span class="details-price">${escapeHtml(price)}</span></div>
+        <div class="detail-item"><strong>Rental Status</strong><span>${listing.rental_status === 'rented' ? '🔴 Rented' : '🟢 Available'}</span></div>
         <div class="detail-item"><strong>Bedrooms</strong><span>${escapeHtml(listing.bedrooms || 'Not specified')}</span></div>
         <div class="detail-item"><strong>Furnished</strong><span>${escapeHtml(listing.furnished || 'Not specified')}</span></div>
         <div class="detail-item"><strong>Location</strong><span>${escapeHtml(location)}</span></div>
@@ -192,7 +194,7 @@ function renderListing(listing){
     <div class="details-hero">
       <img src="${escapeHtml(heroImg)}" alt="${escapeHtml(title)}" onerror="this.src='images/backgrounds/addis-ababa.jpg'">
       <div class="details-hero-content">
-        <span class="details-badge">${isJob?'💼 Job Vacancy':'🏠 Home / Property for Rent'}</span>
+        <span class="details-badge">${isJob?'💼 Job Vacancy':(listing.rental_status === 'rented' ? '🔴 Rented' : '🟢 Available')}</span>
         <h2 class="details-title">${escapeHtml(title)}</h2>
         <p class="details-subtitle">📍 ${escapeHtml(location)} &nbsp; • &nbsp; ${escapeHtml(category)}</p>
       </div>

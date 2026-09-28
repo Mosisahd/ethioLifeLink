@@ -25,6 +25,7 @@
             <a href="jobs.html">Jobs</a>
             <a href="homes.html">Homes</a>
             <a href="add-listing.html">Add Listing</a>
+    <a href="my-listings.html">My Listings</a>
     <a href="auth.html" id="auth-nav-link">Log in</a>
 
         </nav>
@@ -422,13 +423,19 @@
     <!-- AVAILABLE HOMES -->
     <section class="latest-section">
         <div class="section-title">
-            <h2>Available Homes</h2>
+            <h2>Homes for Rent</h2>
             <span id="home-count" class="see-more"></span>
         </div>
         <div class="listing-list" id="home-list">
             <div class="message-box">Loading approved homes...</div>
         </div>
     </section>
+
+    <style>
+        .rental-status{display:inline-block;font-weight:800;padding:6px 10px;border-radius:999px;margin:6px 0}
+        .rental-status.available{background:#dcfce7;color:#166534}
+        .rental-status.rented{background:#fee2e2;color:#991b1b}
+    </style>
 
     <!-- JAVASCRIPT -->
     <script>
@@ -481,6 +488,7 @@
                         <p>🏠 ${escapeHtml(category)}</p>
                         <p>📍 ${escapeHtml(location)}</p>
                         <p>💰 ${escapeHtml(home.price||'Price negotiable')}</p>
+                        <p class="rental-status ${sameValue(home.rental_status,'rented')?'rented':'available'}">${sameValue(home.rental_status,'rented')?'🔴 Rented':'🟢 Available'}</p>
                         <a href="details.html?id=${encodeURIComponent(home.id)}" class="view-details">View Details</a>
                     </div>
                 </article>`;

@@ -326,6 +326,7 @@
     <a href="jobs.html">Jobs</a>
     <a href="homes.html">Homes</a>
     <a href="add-listing.html">Add Listing</a>
+    <a href="my-listings.html">My Listings</a>
     <a href="auth.html" id="auth-nav-link">Login / Sign Up</a>
 
 </nav>
@@ -675,7 +676,18 @@
                 <small>Applicants can visit the company website for more information.</small>
             </div>
 
-            <!-- JOB EXPIRY DATE -->
+            <!-- APPLICATION OPEN / EXPIRY DATES -->
+
+            <div class="form-group">
+                <label for="jobOpenDate">Application Start Date</label>
+                <input
+                    type="date"
+                    id="jobOpenDate"
+                    autocomplete="off"
+                    required
+                >
+                <small>Choose the first date when applicants can apply. You can announce the job before applications open.</small>
+            </div>
 
             <div class="form-group">
                 <label for="jobExpireDate">Vacancy Expire Date</label>
@@ -1819,93 +1831,113 @@ async function searchLocation(type) {
         return;
     }
 
+    const statusId = type === "Job" ? "mapStatus" : "mapStatusHome";
+    const statusElement = document.getElementById(statusId);
+
     try {
-        const searchURL =
-            "https://nominatim.openstreetmap.org/search?" +
-            "format=json&limit=1&countrycodes=et&q=" +
+        statusElement.innerHTML =
+            "🔎 <strong>Searching for the location...</strong>";
+
+        /*
+         * Use Photon first because it is browser-friendly and does not
+         * require an API key. Ethiopia is included in the query so that
+         * common Ethiopian city/area names are searched in the right country.
+         */
+        const photonURL =
+            "https://photon.komoot.io/api/?limit=1&lang=en&q=" +
             encodeURIComponent(searchText + ", Ethiopia");
 
-        const response = await fetch(searchURL);
+        let response = await fetch(photonURL, {
+            method: "GET",
+            headers: { "Accept": "application/json" }
+        });
 
-        if (!response.ok) {
-            throw new Error("Location search failed.");
+        let results = [];
+        let displayName = "";
+
+        if (response.ok) {
+            const data = await response.json();
+            if (data.features && data.features.length) {
+                const feature = data.features[0];
+                const coordinates = feature.geometry && feature.geometry.coordinates;
+
+                if (coordinates && coordinates.length >= 2) {
+                    results = [{
+                        lat: parseFloat(coordinates[1]),
+                        lon: parseFloat(coordinates[0])
+                    }];
+
+                    const props = feature.properties || {};
+                    displayName = [
+                        props.name,
+                        props.city,
+                        props.state,
+                        props.country
+                    ].filter(Boolean).filter((value, index, arr) => arr.indexOf(value) === index).join(", ");
+                }
+            }
         }
 
-        const results = await response.json();
+        /* Fallback to OpenStreetMap Nominatim if Photon has no result. */
+        if (!results.length) {
+            const nominatimURL =
+                "https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&countrycodes=et&accept-language=en&q=" +
+                encodeURIComponent(searchText + ", Ethiopia");
+
+            response = await fetch(nominatimURL, {
+                method: "GET",
+                headers: { "Accept": "application/json" }
+            });
+
+            if (response.ok) {
+                const nominatimResults = await response.json();
+                if (nominatimResults.length) {
+                    const result = nominatimResults[0];
+                    results = [{
+                        lat: parseFloat(result.lat),
+                        lon: parseFloat(result.lon)
+                    }];
+                    displayName = result.display_name || "Location found";
+                }
+            }
+        }
 
         if (!results.length) {
-            const statusId =
-                type === "Job"
-                    ? "mapStatus"
-                    : "mapStatusHome";
-
-            document.getElementById(statusId).innerHTML =
+            statusElement.innerHTML =
                 "⚠️ <strong>We couldn't find that name.</strong><br><br>" +
-                "Move and zoom the map manually, then place the red pin.";
-
+                "Try a city, area, or nearby landmark, or move and zoom the map manually, then place the red pin.";
             return;
         }
 
-        const result = results[0];
-        const latitude = parseFloat(result.lat);
-        const longitude = parseFloat(result.lon);
+        const latitude = results[0].lat;
+        const longitude = results[0].lon;
 
         if (type === "Job") {
-            jobMap.setView(
-                [latitude, longitude],
-                17
-            );
+            jobMap.setView([latitude, longitude], 17);
+            createJobMarker(latitude, longitude);
 
-            createJobMarker(
-                latitude,
-                longitude
-            );
-
-            document.getElementById(
-                "confirmedLocation"
-            ).style.display = "none";
-
-            document.getElementById(
-                "mapStatus"
-            ).innerHTML =
+            document.getElementById("confirmedLocation").style.display = "none";
+            statusElement.innerHTML =
                 "📍 <strong>Location found!</strong><br><br>" +
-                result.display_name +
-                "<br><br>" +
-                "Drag the 🔴 red pin onto the exact building, " +
-                "then confirm it.";
-
+                (displayName || "Location found") +
+                "<br><br>Drag the 🔴 red pin onto the exact building, then confirm it.";
         } else {
-            homeMap.setView(
-                [latitude, longitude],
-                17
-            );
+            homeMap.setView([latitude, longitude], 17);
+            createHomeMarker(latitude, longitude);
 
-            createHomeMarker(
-                latitude,
-                longitude
-            );
-
-            document.getElementById(
-                "confirmedLocationHome"
-            ).style.display = "none";
-
-            document.getElementById(
-                "mapStatusHome"
-            ).innerHTML =
+            document.getElementById("confirmedLocationHome").style.display = "none";
+            statusElement.innerHTML =
                 "📍 <strong>Location found!</strong><br><br>" +
-                result.display_name +
-                "<br><br>" +
-                "Drag the 🔴 red pin onto the exact property, " +
-                "then confirm it.";
+                (displayName || "Location found") +
+                "<br><br>Drag the 🔴 red pin onto the exact property, then confirm it.";
         }
 
     } catch (error) {
         console.error("LOCATION SEARCH ERROR:", error);
 
-        alert(
-            "Location search is unavailable right now. " +
-            "You can still select the location manually on the map."
-        );
+        document.getElementById(statusId).innerHTML =
+            "⚠️ <strong>Location search is temporarily unavailable.</strong><br><br>" +
+            "You can still select the location manually on the map.";
     }
 }
 
@@ -2051,6 +2083,17 @@ async function uploadHomeImages(session) {
 }
 
 /* =========================================================
+   EDIT / REVIEW STATE
+   ========================================================= */
+let editingListingId = null;
+let editingListingType = null;
+let loadedEditListing = null;
+
+function isEditMode() {
+    return !!editingListingId;
+}
+
+/* =========================================================
    SUPABASE SAVE
    ========================================================= */
 async function saveListing(listing) {
@@ -2072,6 +2115,23 @@ async function saveListing(listing) {
     }
 
     await ensureFreshSession();
+
+    if (isEditMode()) {
+        const updateData = { ...listing, status: "pending", admin_feedback: null, reviewed_at: null, reviewed_by: null };
+        delete updateData.posted_at;
+        delete updateData.submitted_by;
+        console.log("✏️ Updating listing after requested changes:", editingListingId, updateData);
+        let result = await window.supabaseClient
+            .from("listings")
+            .update(updateData)
+            .eq("id", editingListingId)
+            .eq("submitted_by", (await window.supabaseClient.auth.getUser()).data.user.id);
+        if (result.error) {
+            console.error("❌ SUPABASE UPDATE ERROR:", result.error);
+            throw result.error;
+        }
+        return true;
+    }
 
     console.log("📤 Inserting listing into Supabase:", listing);
     let result = await window.supabaseClient.from("listings").insert([listing]);
@@ -2191,6 +2251,7 @@ async function submitListing(event, type) {
         const salary = valueOf("jobSalary");
         const companyWebsite = valueOf("companyWebsite");
         const applicationMethod = valueOf("applicationMethod");
+        const jobOpenDate = valueOf("jobOpenDate");
         const jobExpireDate = valueOf("jobExpireDate");
         const city = valueOf("jobCity");
         const area = valueOf("jobArea");
@@ -2203,6 +2264,7 @@ async function submitListing(event, type) {
             !category ||
             !employmentType ||
             !applicationMethod ||
+            !jobOpenDate ||
             !jobExpireDate ||
             !city ||
             !area ||
@@ -2212,6 +2274,11 @@ async function submitListing(event, type) {
                 "Please complete all required job fields."
             );
 
+            return;
+        }
+
+        if (jobExpireDate < jobOpenDate) {
+            alert("Vacancy Expire Date cannot be earlier than the Application Start Date.");
             return;
         }
 
@@ -2263,8 +2330,11 @@ async function submitListing(event, type) {
             company_website:
                 companyWebsite || null,
 
+            // Applications may open on a date later than the announcement/submission date.
+            open_at:
+                jobOpenDate || null,
+
             // Keep the exact date selected by the user.
-            // Save the user-selected vacancy expiry date in the actual listings column: expire_at.
             expire_at:
                 jobExpireDate || null,
 
@@ -2302,12 +2372,14 @@ async function submitListing(event, type) {
 
             await saveListing(listing);
 
-            alert(
-                "✅ Job submitted successfully!\n\n" +
-                "Your job vacancy has been sent to the " +
-                "Admin Dashboard for approval.\n\n" +
-                "Status: Pending review"
-            );
+            alert(isEditMode()
+                ? "✅ Job updated successfully!\n\nYour changes were sent back to the Admin Dashboard for review.\n\nStatus: Pending review"
+                : "✅ Job submitted successfully!\n\nYour job vacancy has been sent to the Admin Dashboard for approval.\n\nStatus: Pending review");
+
+            if (isEditMode()) {
+                location.href = "my-listings.html";
+                return;
+            }
 
             form.reset();
 
@@ -2456,6 +2528,9 @@ async function submitListing(event, type) {
             furnished:
                 furnished || null,
 
+            property_condition:
+                valueOf("propertyCondition") || null,
+
             company_website: null,
 
             email:
@@ -2492,17 +2567,21 @@ async function submitListing(event, type) {
             const propertyImageUrls = await uploadHomeImages(authSession);
             if (propertyImageUrls.length) {
                 listing.image_urls = propertyImageUrls;
+            } else if (isEditMode() && loadedEditListing && loadedEditListing.image_urls) {
+                listing.image_urls = loadedEditListing.image_urls;
             }
 
             setButtonBusy(button, "⏳ Submitting...");
             await saveListing(listing);
 
-            alert(
-                "✅ Home submitted successfully!\n\n" +
-                "Your property has been sent to the " +
-                "Admin Dashboard for approval.\n\n" +
-                "Status: Pending review"
-            );
+            alert(isEditMode()
+                ? "✅ Home updated successfully!\n\nYour changes were sent back to the Admin Dashboard for review.\n\nStatus: Pending review"
+                : "✅ Home submitted successfully!\n\nYour property has been sent to the Admin Dashboard for approval.\n\nStatus: Pending review");
+
+            if (isEditMode()) {
+                location.href = "my-listings.html";
+                return;
+            }
 
             form.reset();
             const homePreview = document.getElementById("homeImagePreview");
@@ -2536,21 +2615,81 @@ async function submitListing(event, type) {
     }
 }
 
+/* ---------- SAFE TEXT FOR EDIT FEEDBACK ---------- */
+function escapeHtml(value) {
+    if (value === null || value === undefined) return "";
+    return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
 /* ---------- STARTUP CHECK ---------- */
-document.addEventListener("DOMContentLoaded", async function () {
-    // Vacancy expiry date: do not pre-fill or reuse an old browser-restored date.
-    // The user must choose the actual vacancy expiry date.
-    const expiryInput = document.getElementById("jobExpireDate");
-    if (expiryInput) {
-        const now = new Date();
-        const localToday = [
-            now.getFullYear(),
-            String(now.getMonth() + 1).padStart(2, "0"),
-            String(now.getDate()).padStart(2, "0")
-        ].join("-");
-        expiryInput.min = localToday;
-        expiryInput.value = "";
+async function loadListingForEdit(id, session) {
+    try {
+        const { data, error } = await window.supabaseClient
+            .from("listings")
+            .select("*")
+            .eq("id", id)
+            .eq("submitted_by", session.user.id)
+            .maybeSingle();
+        if (error) throw error;
+        if (!data) {
+            alert("This listing could not be found or you do not have permission to edit it.");
+            location.href = "my-listings.html";
+            return;
+        }
+        if (!['changes_requested','rejected','pending'].includes(data.status)) {
+            alert("Only listings that are pending, need changes, or were rejected can be edited.");
+            location.href = "my-listings.html";
+            return;
+        }
+        editingListingId = String(data.id);
+        editingListingType = data.listing_type;
+        loadedEditListing = data;
+        document.title = "EthioLifeLink - Edit Listing";
+        const heading = document.querySelector("#jobForm h2");
+        const homeHeading = document.querySelector("#homeForm h2");
+        if (heading && data.listing_type === 'job') heading.textContent = "✏️ Edit Job Vacancy";
+        if (homeHeading && data.listing_type === 'home') homeHeading.textContent = "✏️ Edit Home for Rent";
+        const note = document.querySelector(".form-container .note");
+        if (note) note.innerHTML = "<strong>Admin feedback:</strong> " + escapeHtml(data.admin_feedback || "Please review your listing and make any needed changes.") + "<br><br>Your edited listing will return to the Admin Dashboard for review.";
+        if (data.listing_type === 'job') {
+            openJobForm();
+            const set=(id,v)=>{const e=document.getElementById(id);if(e)e.value=v??'';};
+            set('jobTitle',data.title); set('jobDescription',data.description); set('jobCategory',data.category); set('employmentType',data.employment_type); set('education',data.education); set('experience',data.experience); set('jobSalary',data.salary); set('applicationMethod',Array.isArray(data.application_methods)?data.application_methods[0]:(data.application_methods||'')); set('companyWebsite',data.company_website); set('jobOpenDate',data.open_at); set('jobExpireDate',data.expire_at); set('jobCity',data.city); set('jobArea',data.area); set('jobPhone',data.phone); set('jobEmail',data.email); set('jobWhatsapp',data.whatsapp); set('latitudeInput',data.latitude); set('longitudeInput',data.longitude);
+            if (data.latitude && data.longitude) { createJobMarker(data.latitude, data.longitude); document.getElementById('confirmedLocation').style.display='block'; document.getElementById('mapStatus').innerHTML='✅ <strong>Existing location loaded.</strong>'; }
+            const btn=document.querySelector('#jobForm button[type="submit"]'); if(btn) btn.textContent='Update Job & Send for Review';
+        } else {
+            openHomeForm();
+            const set=(id,v)=>{const e=document.getElementById(id);if(e)e.value=v??'';};
+            set('homeTitle',data.title); set('homeDescription',data.description); set('propertyType',data.property_type); set('propertyCategory',data.category); set('bedrooms',data.bedrooms); set('propertyCondition',data.property_condition); set('furnished',data.furnished); set('homePrice',data.price); set('homeCity',data.city); set('homeArea',data.area); set('homePhone',data.phone); set('homeEmail',data.email); set('homeWhatsapp',data.whatsapp); set('latitudeInputHome',data.latitude); set('longitudeInputHome',data.longitude); changePropertyType();
+            if (data.latitude && data.longitude) { createHomeMarker(data.latitude, data.longitude); document.getElementById('confirmedLocationHome').style.display='block'; document.getElementById('mapStatusHome').innerHTML='✅ <strong>Existing location loaded.</strong>'; }
+            const btn=document.querySelector('#homeForm button[type="submit"]'); if(btn) btn.textContent='Update Home & Send for Review';
+        }
+    } catch (e) {
+        console.error(e);
+        alert("Could not load this listing for editing.\n\n" + (e.message || e));
+        location.href = "my-listings.html";
     }
+}
+
+document.addEventListener("DOMContentLoaded", async function () {
+    // Vacancy dates use the visitor's local calendar date.
+    const now = new Date();
+    const localToday = [
+        now.getFullYear(),
+        String(now.getMonth() + 1).padStart(2, "0"),
+        String(now.getDate()).padStart(2, "0")
+    ].join("-");
+    const openInput = document.getElementById("jobOpenDate");
+    const expiryInput = document.getElementById("jobExpireDate");
+    if (openInput) openInput.min = localToday;
+    if (expiryInput) expiryInput.min = localToday;
+
+    const editId = new URLSearchParams(location.search).get("edit");
 
     if (!window.supabaseClient) {
         console.error("❌ Supabase client was not created.");
@@ -2569,6 +2708,11 @@ document.addEventListener("DOMContentLoaded", async function () {
             return;
         }
         console.log("✅ Add Listing: authenticated session ready.");
+
+        if (editId) {
+            await loadListingForEdit(editId, session);
+        }
+
         changePropertyType();
     } catch (e) {
         console.error("Session check failed:", e);
