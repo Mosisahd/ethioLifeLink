@@ -24,6 +24,7 @@
     <a href="jobs.html">Jobs</a>
     <a href="homes.html">Homes</a>
     <a href="add-listing.html">Add Listing</a>
+    <a href="my-listings.html">My Listings</a>
     <a href="auth.html" id="auth-nav-link">Log in</a>
 </nav>
 
@@ -223,6 +224,8 @@ function renderLatestJobs(jobs) {
             '<p>📍 ' + escapeHtml(formatLocation(job)) + '</p>' +
             '<p>💼 ' + escapeHtml(job.employment_type || "Employment type not specified") + '</p>' +
             formatPrice(job, true) +
+            (job.open_at ? '<p>📅 Applications open: ' + escapeHtml(job.open_at) + '</p>' : '') +
+            (job.expire_at ? '<p>⏳ Expires: ' + escapeHtml(job.expire_at) + '</p>' : '') +
             '<a href="details.html?id=' + encodeURIComponent(job.id) + '" class="view-details">View Details</a>' +
             '</article>';
     }).join("");
@@ -259,7 +262,7 @@ async function loadLatestListings() {
     try {
         const results = await Promise.all([
             window.supabaseClient.from("listings")
-                .select("id,listing_type,title,property_type,city,area,employment_type,salary,price,company_website,expire_at,posted_at")
+                .select("id,listing_type,title,property_type,city,area,employment_type,salary,price,company_website,open_at,expire_at,posted_at")
                 .eq("listing_type", "job")
                 .eq("status", "approved")
                 .order("posted_at", { ascending: false })
@@ -276,7 +279,9 @@ async function loadLatestListings() {
         if (results[0].error) throw results[0].error;
         if (results[1].error) throw results[1].error;
 
-        renderLatestJobs((results[0].data || []).filter(job => !job.expire_at || new Date(job.expire_at) >= new Date()));
+        const today = new Date();
+        const todayKey = [today.getFullYear(), String(today.getMonth()+1).padStart(2,"0"), String(today.getDate()).padStart(2,"0")].join("-");
+        renderLatestJobs((results[0].data || []).filter(job => !job.expire_at || job.expire_at >= todayKey));
         renderLatestHomes(results[1].data || []);
     } catch (error) {
         console.error("LATEST LISTINGS ERROR:", error);
